@@ -19,13 +19,7 @@ public class Hardware {
     public DcMotorEx backRight;
     public DcMotorEx backLeft;
 
-    public DcMotorEx intake;
-    public DcMotorEx pollenShooter;
-    public DcMotorEx nectarShooter;
-
     public IMU imu;
-
-    public Limelight3A limelight;
 
     public void init(HardwareMap hardwareMap) {
 
@@ -34,34 +28,20 @@ public class Hardware {
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
 
-
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        intake.setDirection(DcMotorSimple.Direction.FORWARD);
-
-
         frontLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        pollenShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        nectarShooter.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        pollenShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        nectarShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        intake = hardwareMap.get(DcMotorEx.class, "intake");
-
 
         imu = hardwareMap.get(IMU.class, "imu");
         IMU.Parameters parameters = new IMU.Parameters(
@@ -71,9 +51,6 @@ public class Hardware {
                 )
         );
         imu.initialize(parameters);
-
-
-        limelight = hardwareMap.get(Limelight3A.class, "limelight");
 
     }
 }
