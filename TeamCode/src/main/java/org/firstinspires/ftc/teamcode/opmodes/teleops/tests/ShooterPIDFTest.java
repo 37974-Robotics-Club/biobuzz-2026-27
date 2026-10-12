@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
+import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 @Configurable
 @TeleOp(group = "tests")
@@ -28,9 +29,12 @@ public class ShooterPIDFTest extends OpMode {
 
     private DcMotorEx pollenShooter;
     private TelemetryManager panelsTelemetry;
+    private VoltageSensor batteryVoltage;
 
     @Override
     public void init() {
+        batteryVoltage = hardwareMap.voltageSensor.iterator().next();
+
         pollenShooter = hardwareMap.get(
                 DcMotorEx.class, "pollenShooter");
 
@@ -63,6 +67,7 @@ public class ShooterPIDFTest extends OpMode {
         panelsTelemetry.addData("Target Velocity", targetVelocity);
         panelsTelemetry.addData("Actual Velocity", actualVelocity);
         panelsTelemetry.addData("Velocity Error", error);
+        panelsTelemetry.addData("Battery Voltage", batteryVoltage.getVoltage());
 
         panelsTelemetry.debug("Target Velocity: " + targetVelocity);
         panelsTelemetry.debug("Actual Velocity: " + actualVelocity);
