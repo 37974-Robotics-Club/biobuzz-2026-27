@@ -11,10 +11,14 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Configurable
-@TeleOp(name = "Shooter PIDF Test", group = "Testing")
+@TeleOp(group = "tests")
 public class ShooterPIDFTest extends OpMode {
 
-    // Adjustable through Panels
+    /**
+     * Adapted from FTControl docs
+     */
+
+    // use Panels
     public static double targetVelocity = 0.0;
 
     public static double kP = 10.0;
@@ -35,21 +39,15 @@ public class ShooterPIDFTest extends OpMode {
         pollenShooter.setPower(0);
         pollenShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        telemetry.addLine("Shooter PIDF Test initialized");
-        telemetry.update();
     }
 
     @Override
     public void start() {
-        //pollenShooter.setVelocity(99999999);
+        pollenShooter.setVelocity(0);
     }
 
     @Override
     public void loop() {
-
-        if (gamepad1.a) {
-            pollenShooter.setVelocity(999999999);
-        }
 
         pollenShooter.setPIDFCoefficients(
                 DcMotor.RunMode.RUN_USING_ENCODER,
