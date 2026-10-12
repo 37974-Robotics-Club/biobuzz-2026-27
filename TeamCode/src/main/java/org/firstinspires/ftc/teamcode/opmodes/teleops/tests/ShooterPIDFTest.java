@@ -41,11 +41,16 @@ public class ShooterPIDFTest extends OpMode {
 
     @Override
     public void start() {
-        pollenShooter.setPower(0);
+        //pollenShooter.setVelocity(99999999);
     }
 
     @Override
     public void loop() {
+
+        if (gamepad1.a) {
+            pollenShooter.setVelocity(999999999);
+        }
+
         pollenShooter.setPIDFCoefficients(
                 DcMotor.RunMode.RUN_USING_ENCODER,
                 new PIDFCoefficients(kP, kI, kD, kF)
