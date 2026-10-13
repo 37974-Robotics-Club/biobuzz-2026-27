@@ -35,8 +35,7 @@ public class ShooterPIDFTest extends OpMode {
     public void init() {
         batteryVoltage = hardwareMap.voltageSensor.iterator().next();
 
-        pollenShooter = hardwareMap.get(
-                DcMotorEx.class, "pollenShooter");
+        pollenShooter = hardwareMap.get(DcMotorEx.class, "pollenShooter");
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
@@ -53,24 +52,29 @@ public class ShooterPIDFTest extends OpMode {
     @Override
     public void loop() {
 
-        pollenShooter.setPIDFCoefficients(
-                DcMotor.RunMode.RUN_USING_ENCODER,
+        pollenShooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
                 new PIDFCoefficients(kP, kI, kD, kF)
         );
 
         pollenShooter.setVelocity(targetVelocity);
 
-        double actualVelocity = pollenShooter.getVelocity();
-        double error = targetVelocity - actualVelocity;
+        double currentVelocity = pollenShooter.getVelocity();
+        double error = targetVelocity - currentVelocity;
 
-        // Graph these values in Panels
-        panelsTelemetry.addData("Target Velocity", targetVelocity);
-        panelsTelemetry.addData("Actual Velocity", actualVelocity);
-        panelsTelemetry.addData("Velocity Error", error);
+
+        double shooterRPM = Math.abs(currentVelocity) * 60 / 28;
+
+        telemetry.addData("Shooter RPM", shooterRPM);
+        panelsTelemetry.addData("Shooter RPM", shooterRPM);
         panelsTelemetry.addData("Battery Voltage", batteryVoltage.getVoltage());
 
+        // Graph
+        panelsTelemetry.addData("Target Velocity", targetVelocity);
+        panelsTelemetry.addData("Actual Velocity", currentVelocity);
+        panelsTelemetry.addData("Velocity Error", error);
+
         panelsTelemetry.debug("Target Velocity: " + targetVelocity);
-        panelsTelemetry.debug("Actual Velocity: " + actualVelocity);
+        panelsTelemetry.debug("Actual Velocity: " + currentVelocity);
         panelsTelemetry.debug("Velocity Error: " + error);
         panelsTelemetry.debug("kP: " + kP);
         panelsTelemetry.debug("kI: " + kI);
@@ -78,6 +82,7 @@ public class ShooterPIDFTest extends OpMode {
         panelsTelemetry.debug("kF: " + kF);
 
         panelsTelemetry.update(telemetry);
+        telemetry.update();
     }
 
     @Override
