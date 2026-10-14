@@ -21,8 +21,7 @@ public class PinpointTest extends LinearOpMode {
         DcMotorEx backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         DcMotorEx backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
 
-        GoBildaPinpointDriver pinpoint =
-                hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        GoBildaPinpointDriver pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -53,15 +52,11 @@ public class PinpointTest extends LinearOpMode {
                 pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0));
             }
 
-            telemetry.addData("X", "%.2f in",
-                    pinpoint.getPosX(DistanceUnit.INCH));
-
-            telemetry.addData("Y", "%.2f in",
-                    pinpoint.getPosY(DistanceUnit.INCH));
-
-            telemetry.addData("Heading", "%.2f°",
-                    pinpoint.getHeading(AngleUnit.DEGREES));
-
+            telemetry.addData("Pinpoint Reset", "Gamepad 1 Share");
+            telemetry.addLine();
+            telemetry.addData("X", "%.2f in", pinpoint.getPosX(DistanceUnit.INCH));
+            telemetry.addData("Y", "%.2f in", pinpoint.getPosY(DistanceUnit.INCH));
+            telemetry.addData("Heading", "%.2f°", pinpoint.getHeading(AngleUnit.DEGREES));
             telemetry.update();
         }
     }

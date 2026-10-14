@@ -60,6 +60,11 @@ public class DrivetrainTestFieldCentric extends LinearOpMode {
             backLeft.setPower(backLeftPower);
             frontRight.setPower(frontRightPower);
             backRight.setPower(backRightPower);
+
+            telemetry.addData("IMU Reset", "Gamepad 1 Share");
+            telemetry.addLine();
+            telemetry.addData("Heading", imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+            telemetry.update();
         }
     }
 }
