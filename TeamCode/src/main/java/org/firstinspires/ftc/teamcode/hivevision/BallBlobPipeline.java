@@ -1,30 +1,18 @@
-/*
- * BallBlobPipeline - shared base for the two Control Hub ball detectors
- * (cv/TeamCode/BallDetectorPipeline.java and archive/lab/TeamCode/LabBallDetectorPipeline.java).
- * Everything identical between them lives here, so a fix (bestOf()'s cost
- * shape, a new field on BallBlob) can't silently land in only one detector:
- *   - BallColor + BallBlob
- *   - bestOf() / getDetections() candidate API
- *   - suspend / resume / suspendDetection / resumeDetection control
- *   - the VisionProcessor loop contract: processFrame() gating, blob
- *     normalization, snapshot hand-off, and the debug overlay
- *   - contour -> shape/size gate -> blob extraction (blobsFromMask)
- *
- * Subclasses implement only their per-color math:
- *   expectArea(BallColor)  - "typical real-ball area" per color
- *   findBlobs(input, out)  - threshold the frame, call blobsFromMask() per
- *                            color, append BallBlobs to `out`
- *
- * Threading: `suspend`/`detect` are written by the OpMode thread and read by
- * the VisionProcessor thread every frame, so they are volatile. `detections`
- * is swapped under `lock` and only read through bestOf()/getDetections().
- */
 package org.firstinspires.ftc.teamcode.hivevision;
+
+import android.graphics.Bitmap;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
+import org.firstinspires.ftc.robotcore.external.stream.CameraStreamSource;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
+import org.firstinspires.ftc.vision.VisionProcessor;
+
+import org.opencv.android.Utils;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.Point;
@@ -32,27 +20,32 @@ import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
-//import org.firstinspires.ftc.vision.CameraCalibration;
-import org.firstinspires.ftc.vision.VisionProcessor;
+public abstract class BallBlobPipeline
+        implements VisionProcessor, CameraStreamSource {
 
-public abstract class BallBlobPipeline implements VisionProcessor {
-
-    public enum BallColor { YELLOW, RED, BLUE }
+    public enum BallColor {
+        YELLOW, RED, BLUE
+    }
 
     /** One detected ball candidate for the OpMode. */
     public static class BallBlob {
         public final BallColor color;
-        public final Rect   rect;
+        public final Rect rect;
         public final double area;
-        public final double cx, cy;
-        public double cxNorm = 0, cyNorm = 0, wNorm = 0, hNorm = 0;
+        public final double cx;
+        public final double cy;
 
-        BallBlob(BallColor c, Rect r, double a) {
-            color = c;
-            rect = r;
-            area = a;
-            cx = r.x + r.width / 2.0;
-            cy = r.y + r.height / 2.0;
+        public double cxNorm = 0;
+        public double cyNorm = 0;
+        public double wNorm = 0;
+        public double hNorm = 0;
+
+        BallBlob(BallColor color, Rect rect, double area) {
+            this.color = color;
+            this.rect = rect;
+            this.area = area;
+            this.cx = rect.x + rect.width / 2.0;
+            this.cy = rect.y + rect.height / 2.0;
         }
 
         void normalize(int frameW, int frameH) {
@@ -63,35 +56,54 @@ public abstract class BallBlobPipeline implements VisionProcessor {
         }
     }
 
-    protected static final boolean USE_MORPH = true;    // close small gaps
+    protected static final boolean USE_MORPH = true;
 
     private volatile boolean suspend = false;
-    private volatile boolean detect  = true;
+    private volatile boolean detect = true;
+
     private final Object lock = new Object();
     private List<BallBlob> detections = new ArrayList<>();
 
-    /** Typical real-ball contour area per color (px at camera resolution). */
-    protected abstract double expectArea(BallColor c);
+    private final AtomicReference<Bitmap> lastFrame =
+            new AtomicReference<>(
+                    Bitmap.createBitmap(
+                            1, 1,
+                            Bitmap.Config.RGB_565
+                    )
+            );
 
-    /** Extract this track's color candidates into `out` (only called while detection is active). */
-    protected abstract void findBlobs(Mat input, List<BallBlob> out);
+    protected abstract double expectArea(BallColor color);
 
-    /** Most ball-like detected blob of a color (candidate, not ground truth). */
+    protected abstract void findBlobs(
+            Mat input,
+            List<BallBlob> out
+    );
+
+    /** Returns the most ball-like candidate of the requested color. */
     public BallBlob bestOf(BallColor color) {
         BallBlob best = null;
         double bestCost = Double.MAX_VALUE;
+
         synchronized (lock) {
             for (BallBlob b : detections) {
-                if (b.color != color) continue;
-                double fill = b.area / (double) (b.rect.width * b.rect.height);
-                double cost = Math.abs(b.area / expectArea(color) - 1.0)
-                        + 4.0 * (1.0 - fill);
+                if (b.color != color) {
+                    continue;
+                }
+
+                double fill = b.area /
+                        (double) (b.rect.width * b.rect.height);
+
+                double cost =
+                        Math.abs(b.area / expectArea(color) - 1.0)
+                                + 4.0 * (1.0 - fill);
+
                 if (cost < bestCost) {
                     bestCost = cost;
                     best = b;
                 }
             }
         }
+
         return best;
     }
 
@@ -101,87 +113,202 @@ public abstract class BallBlobPipeline implements VisionProcessor {
         }
     }
 
-    public void suspendDetection() { detect = false; }
-    public void resumeDetection()  { detect = true; }
-    public void suspend()          { suspend = true; }
-    public void resume()           { suspend = false; }
+    public void suspendDetection() {
+        detect = false;
+    }
+
+    public void resumeDetection() {
+        detect = true;
+    }
+
+    public void suspend() {
+        suspend = true;
+    }
+
+    public void resume() {
+        suspend = false;
+    }
 
     @Override
-    public void init(int width, int height, CameraCalibration calibration) {
-        // Nothing per-resolution to do; area gates are per-track.
+    public void init(
+            int width,
+            int height,
+            CameraCalibration calibration
+    ) {
+        Bitmap initialFrame = Bitmap.createBitmap(
+                width,
+                height,
+                Bitmap.Config.RGB_565
+        );
+
+        lastFrame.set(initialFrame);
     }
 
     @Override
     public Mat processFrame(Mat input, long captureTimeNanos) {
         if (suspend) {
-            return input; // return unmodified
+            updateStreamFrame(input);
+            return input;
         }
+
         List<BallBlob> out = new ArrayList<>();
-        if (detect) findBlobs(input, out);
-        for (BallBlob b : out) b.normalize(input.cols(), input.rows());
 
-        synchronized (lock) { detections = out; }
+        // Always run detection unless processing is suspended.
+        findBlobs(input, out);
 
-        if (!detect) {
-            return input; // paused: no debug overlay, and no wasted full-frame clone
+        for (BallBlob b : out) {
+            b.normalize(input.cols(), input.rows());
         }
 
-        // Optional overlay for debug (VisionPortal can display it)
+        synchronized (lock) {
+            detections = out;
+        }
+
+        // "detect" controls the overlay, not whether detection runs.
+        if (!detect) {
+            updateStreamFrame(input);
+            return input;
+        }
+
         Mat output = input.clone();
         drawOverlay(output, out);
-        return output;
+        updateStreamFrame(output);
+        output.release();
+
+        return input;
+    }
+
+    private void updateStreamFrame(Mat frame) {
+        Bitmap bitmap = Bitmap.createBitmap(
+                frame.cols(),
+                frame.rows(),
+                Bitmap.Config.RGB_565
+        );
+
+        Utils.matToBitmap(frame, bitmap);
+
+        // Atomically publish the latest frame to Panels.
+        lastFrame.set(bitmap);
     }
 
     @Override
-    public void onDrawFrame(android.graphics.Canvas canvas, int onscreenWidth, int onscreenHeight,
-                            float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
-        // No custom canvas drawing needed.
+    public void getFrameBitmap(
+            Continuation<? extends Consumer<Bitmap>> continuation
+    ) {
+        continuation.dispatch(
+                consumer -> consumer.accept(lastFrame.get())
+        );
     }
 
-    /** Morph + contour extraction + shape/size gating, shared by both tracks.
-     *  A subclass builds a per-color mask with its own threshold math, then
-     *  calls this. Ownership of `mask` transfers here (it is released). */
-    protected void blobsFromMask(Mat mask, BallColor color,
-                                 double minAreaPx, double maxAreaPx,
-                                 double minAspect, double maxAspect,
-                                 double minFill, double maxFill,
-                                 List<BallBlob> out) {
+    @Override
+    public void onDrawFrame(
+            android.graphics.Canvas canvas,
+            int onscreenWidth,
+            int onscreenHeight,
+            float scaleBmpPxToCanvasPx,
+            float scaleCanvasDensity,
+            Object userContext
+    ) {
+        // No custom Canvas drawing required.
+    }
+
+    /**
+     * Applies morphology and extracts contours from a color mask.
+     * Ownership of mask transfers to this method.
+     */
+    protected void blobsFromMask(
+            Mat mask,
+            BallColor color,
+            double minAreaPx,
+            double maxAreaPx,
+            double minAspect,
+            double maxAspect,
+            double minFill,
+            double maxFill,
+            List<BallBlob> out
+    ) {
         if (USE_MORPH) {
-            Mat el = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE,
-                    new org.opencv.core.Size(5, 5));
-            Imgproc.morphologyEx(mask, mask, Imgproc.MORPH_OPEN, el);
-            Imgproc.morphologyEx(mask, mask, Imgproc.MORPH_CLOSE, el);
-            el.release();
+            Mat element = Imgproc.getStructuringElement(
+                    Imgproc.MORPH_ELLIPSE,
+                    new org.opencv.core.Size(5, 5)
+            );
+
+            Imgproc.morphologyEx(
+                    mask, mask, Imgproc.MORPH_OPEN, element
+            );
+
+            Imgproc.morphologyEx(
+                    mask, mask, Imgproc.MORPH_CLOSE, element
+            );
+
+            element.release();
         }
+
         List<MatOfPoint> contours = new ArrayList<>();
-        Mat hier = new Mat();
-        Imgproc.findContours(mask, contours, hier, Imgproc.RETR_EXTERNAL,
-                Imgproc.CHAIN_APPROX_SIMPLE);
-        hier.release();
+        Mat hierarchy = new Mat();
+
+        Imgproc.findContours(
+                mask,
+                contours,
+                hierarchy,
+                Imgproc.RETR_EXTERNAL,
+                Imgproc.CHAIN_APPROX_SIMPLE
+        );
+
+        hierarchy.release();
         mask.release();
-        for (MatOfPoint ct : contours) {
-            double area = Imgproc.contourArea(ct);
-            Rect r = Imgproc.boundingRect(ct);
-            ct.release();
-            if (area < minAreaPx || area > maxAreaPx) continue;
-            if (r.width <= 0 || r.height <= 0) continue;
-            double aspect = (double) r.width / r.height;
-            if (aspect < minAspect || aspect > maxAspect) continue;
-            double fill = area / (double) (r.width * r.height);
-            if (fill < minFill || fill > maxFill) continue;
-            out.add(new BallBlob(color, r, area));
+
+        for (MatOfPoint contour : contours) {
+            double area = Imgproc.contourArea(contour);
+            Rect rect = Imgproc.boundingRect(contour);
+
+            contour.release();
+
+            if (area < minAreaPx || area > maxAreaPx) {
+                continue;
+            }
+
+            if (rect.width <= 0 || rect.height <= 0) {
+                continue;
+            }
+
+            double aspect = (double) rect.width / rect.height;
+
+            if (aspect < minAspect || aspect > maxAspect) {
+                continue;
+            }
+
+            double fill = area /
+                    (double) (rect.width * rect.height);
+
+            if (fill < minFill || fill > maxFill) {
+                continue;
+            }
+
+            out.add(new BallBlob(color, rect, area));
         }
     }
 
     private void drawOverlay(Mat frame, List<BallBlob> blobs) {
         for (BallBlob b : blobs) {
-            Scalar col = b.color == BallColor.YELLOW ? new Scalar(0, 255, 255)
-                    : b.color == BallColor.RED    ? new Scalar(0, 0, 255)
-                    : new Scalar(255, 0, 0);
-            Imgproc.rectangle(frame, b.rect, col, 2);
-            Imgproc.putText(frame, b.color.name(),
+            Scalar color =
+                    b.color == BallColor.YELLOW
+                            ? new Scalar(0, 255, 255)
+                            : b.color == BallColor.RED
+                            ? new Scalar(0, 0, 255)
+                            : new Scalar(255, 0, 0);
+
+            Imgproc.rectangle(frame, b.rect, color, 2);
+
+            Imgproc.putText(
+                    frame,
+                    b.color.name(),
                     new Point(b.rect.x, b.rect.y - 6),
-                    Imgproc.FONT_HERSHEY_PLAIN, 1.0, col, 2);
+                    Imgproc.FONT_HERSHEY_PLAIN,
+                    1.0,
+                    color,
+                    2
+            );
         }
     }
 }

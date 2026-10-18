@@ -31,6 +31,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 
+
 public class BallDetectorPipeline extends BallBlobPipeline {
 
     /* ------------------------------------------------------------------
@@ -99,4 +100,27 @@ public class BallDetectorPipeline extends BallBlobPipeline {
         blobsFromMask(mask, color, MIN_AREA_PX, MAX_AREA_PX,
                 MIN_ASPECT, MAX_ASPECT, MIN_FILL, MAX_FILL, out);
     }
+
+    //temp diag method
+    public int countYellowPixels(Mat input) {
+        Mat hsv = new Mat();
+        Mat mask = new Mat();
+
+        Imgproc.cvtColor(input, hsv, Imgproc.COLOR_RGB2HSV);
+
+        Core.inRange(
+                hsv,
+                new Scalar(9, 90, 45),
+                new Scalar(33, 255, 238),
+                mask
+        );
+
+        int count = Core.countNonZero(mask);
+
+        hsv.release();
+        mask.release();
+
+        return count;
+    } // temp diag method
+
 }
