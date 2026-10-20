@@ -22,6 +22,7 @@ public class TestPath extends OpMode {
 
     private final PoseFactory p = PoseFactory.degrees();
 
+    //add descriptions for each
     private final Pose start = p.of(56, 8, 90);
     private final Pose point1 = p.of(56.1218, 23.0625, 270);
     private final Pose point2 = p.of(73.7721, 23.4587, -178.7138);
@@ -30,10 +31,12 @@ public class TestPath extends OpMode {
     private final Pose park = p.of(55.4666, 29.8487, 0);
 
     private Path path1() {
+
         return line(start, point1).linear(start, point1);
     }
 
     private Path path2() {
+
         return line(point1, point2).linear(point1, point2);
     }
 
@@ -76,6 +79,8 @@ public class TestPath extends OpMode {
         telemetry.addData("X", follower.pose().x());
         telemetry.addData("Y", follower.pose().y());
         telemetry.addData("Heading", Math.toDegrees(follower.pose().heading()));
+        telemetry.addLine();
+        telemetry.addData("Current Path", follower.currentPath());
         telemetry.update();
     }
 }
