@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.opmodes.teleops;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp
@@ -17,6 +18,14 @@ public class TeleOperation extends LinearOpMode {
 
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             // robot centric available
+        }
+
+        if (gamepad1.a) {
+            robot.intake.setState(Intake.IntakeState.INTAKE);
+        } else if (gamepad1.b) {
+            robot.intake.setState(Intake.IntakeState.OUTTAKE);
+        } else {
+            robot.intake.setState(Intake.IntakeState.IDLE);
         }
 
             if (gamepad1.share) {
