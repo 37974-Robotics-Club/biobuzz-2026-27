@@ -10,6 +10,9 @@ public class Shooter {
     private Servo hood;
     private CRServo turret;
 
+    private double targetVelocity;
+    private double currentVelocity;
+
     public enum FlywheelState {
         IDLE,
         SPINNING,
@@ -31,10 +34,36 @@ public class Shooter {
 
     public FlywheelState getState() {
         return currentState;
-
     }
 
-    public void update() {
+    public void setTargetVelocity(double targetVelocity) {
+        this.targetVelocity = targetVelocity;
+    }
+
+    public double getTargetVelocity() {
+        return targetVelocity;
+    }
+
+    public double getCurrentVelocity() {
+        if (flywheel != null) {
+            this.currentVelocity = flywheel.getVelocity();
+        }
+        return currentVelocity;
+    }
+
+    public void setHoodPosition(double hoodPosition) {
+        if (hood != null) {
+            hood.setPosition(hoodPosition);
+        }
+    }
+
+    public void setTurretPower(double turretPower) {
+        if (turret != null) {
+            turret.setPower(turretPower);
+        }
+    }
+
+    public void update() { //incomplete update method
         switch (currentState) {
             case IDLE:
                 flywheel.setPower(0);
