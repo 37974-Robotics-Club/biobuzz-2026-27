@@ -13,6 +13,8 @@ public class Shooter {
     private double targetVelocity;
     private double currentVelocity;
 
+    private boolean isReady = false;
+
     public enum FlywheelState {
         IDLE,
         SPINNING,
@@ -70,11 +72,14 @@ public class Shooter {
                 break;
 
             case SPINNING:
-                flywheel.setPower(1);
+                flywheel.setVelocity(targetVelocity);
                 break;
 
             case READY:
-                flywheel.setPower(1);
+                flywheel.setVelocity(targetVelocity);
+                if (currentVelocity >= targetVelocity * 0.95) {
+                    isReady = true;
+                }
                 break;
 
         }
