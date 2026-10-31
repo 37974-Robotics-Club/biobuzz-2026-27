@@ -12,6 +12,7 @@ public class Shooter {
     public enum FlywheelState {
         IDLE, SPINNING, READY
     }
+
     private FlywheelState state = FlywheelState.IDLE;
 
     private double targetVelocity;
@@ -25,25 +26,31 @@ public class Shooter {
         if (this.flywheel != null) {
             this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
+        if (this.hood != null) {
+            this.setHoodPosition(0); //start at zero
+        }
     }
 
     public void setState(FlywheelState state) {
         this.state = state;
+        this.update();
     }
 
     public void setTargetVelocity(double velocity) {
         this.targetVelocity = velocity;
+        this.update();
     }
 
-    public void setHoodPosition(double pos) {
+    public void setHoodPosition(double position) {
         if (hood != null) {
-            hood.setPosition(Math.max(0.0, Math.min(1.0, pos)));
+            hood.setPosition(Math.max(0.0, Math.min(1.0, position)));
         }
     }
 
-    public void setTurretPower(double power) {
+    public void setTurretPower(double turretPower) {
         if (turret != null) {
-            turret.setPower(power);
+            turret.setPower(turretPower);
+
         }
     }
 
@@ -52,7 +59,7 @@ public class Shooter {
 
         switch (state) {
             case IDLE:
-                flywheel.setPower(0);
+                flywheel.setVelocity(0);
                 isReady = false;
                 break;
 
