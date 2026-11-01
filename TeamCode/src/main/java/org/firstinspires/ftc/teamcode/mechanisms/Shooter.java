@@ -31,14 +31,21 @@ public class Shooter {
         }
     }
 
+    public boolean isReady() { //allows opmode to check readiness of flywheel
+        return isReady;
+    }
+
     public void setState(FlywheelState state) {
         this.state = state;
-        this.update();
+        //should only set value (state)
+        //update should be running constntly regardlss of ths
     }
 
     public void setTargetVelocity(double velocity) {
-        this.targetVelocity = velocity;
-        this.update();
+        this.targetVelocity = Math.max(0, velocity);
+        //selects whichever is larger, 0 or velocity
+        //if distance alculation (future) gives neg val,
+        //prevent flywheel from reversing
     }
 
     public void setHoodPosition(double position) {
@@ -56,6 +63,7 @@ public class Shooter {
 
     public void update() {
         if (flywheel == null) return;
+        double velocityError = Math.abs(targetVelocity - flywheel.getVelocity()); //previous code (flywheel.getVelocity() >= targetVelocity * 0.95) set state ready as long as min speed reached. that can cause uncorrected overshooting
 
         switch (state) {
             case IDLE:
@@ -65,12 +73,18 @@ public class Shooter {
 
             case SPINNING:
                 flywheel.setVelocity(targetVelocity);
-                isReady = false;
+                if (velocityError <= targetVelocity * 0.05) { //now waits until error is reasonabe
+                    state = FlywheelState.READY; //auto transition
+                    isReady = true;
+                }
                 break;
 
             case READY:
                 flywheel.setVelocity(targetVelocity);
-                isReady = flywheel.getVelocity() >= targetVelocity * 0.95;
+                if (velocityError > targetVelocity * 0.10) {
+                    state = FlywheelState.SPINNING;
+                    isReady = false;
+                }
                 break;
         }
     }
