@@ -31,7 +31,6 @@ public class intaketest extends LinearOpMode {
             telemetry.addData("State", intake.getState());
             telemetry.addData("Gamepad 1 square", gamepad1.square);
             telemetry.addData("Gamepad 1 circle", gamepad1.circle);
-            telemetry.addData("Gamepad 1 triangle", gamepad1.triangle);
             telemetry.update();
 
         }
