@@ -76,14 +76,14 @@ public class Shooter {
     }
 
     public void hoodUp() {
-        if (System.currentTimeMillis() - hoodElapsedTime > 100) {
+        if (System.currentTimeMillis() - hoodElapsedTime > 75) {
             setHoodPosition(targetHoodPosition + 0.1);
             hoodElapsedTime = System.currentTimeMillis();
         }
     }
 
     public void hoodDown() {
-        if (System.currentTimeMillis() - hoodElapsedTime > 100) {
+        if (System.currentTimeMillis() - hoodElapsedTime > 75) {
             setHoodPosition(targetHoodPosition - 0.1);
             hoodElapsedTime = System.currentTimeMillis();
         }
