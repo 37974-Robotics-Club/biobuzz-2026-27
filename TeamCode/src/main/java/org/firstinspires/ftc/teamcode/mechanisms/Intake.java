@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 //state machines are life.
 public class Intake {
-    private DcMotorEx intake;
+    private DcMotorEx intakeMotor;
 
     public enum IntakeState {
         IDLE,
@@ -16,23 +16,23 @@ public class Intake {
     private IntakeState currentState = IntakeState.IDLE;
 
     public Intake(DcMotorEx intake) {
-        this.intake = intake;
-        this.intake.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        this.intakeMotor = intake;
+        this.intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     public void setState (IntakeState state) {
         currentState = state;
         switch (currentState) {
             case IDLE:
-                intake.setPower(0);
+                intakeMotor.setPower(0);
                 break;
 
             case INTAKE:
-                intake.setPower(1);
+                intakeMotor.setPower(1);
                 break;
 
             case OUTTAKE:
-                intake.setPower(-1);
+                intakeMotor.setPower(-1);
                 break;
         }
     }
@@ -40,11 +40,4 @@ public class Intake {
     public IntakeState getState() {
         return currentState;
     }
-
-    /*
-    public void update() {
-        }
-
-     */
-
 }
