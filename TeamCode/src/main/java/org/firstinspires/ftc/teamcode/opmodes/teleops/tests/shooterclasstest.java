@@ -27,28 +27,29 @@ public class shooterclasstest extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            if (gamepad1.circle) {
-                shooter.setTargetVelocity(1000);
+            if (gamepad1.rightBumperWasPressed()) {
+                shooter.setTargetVelocity(2000);
             } else {
                 shooter.setTargetVelocity(0);
             }
 
-            if (gamepad1.dpad_down) {
+            if (gamepad1.circle) {
                 turret.setPower(1);
             } else {
                 turret.setPower(0);
             }
 
-            if (gamepad1.triangle) {
-                hood.setPosition(1);
-            } else {
-                hood.setPosition(0);
+            if (gamepad1.dpad_up) {
+                shooter.hoodUp();
+            } else if (gamepad1.dpad_down) {
+                shooter.hoodDown();
             }
 
 
             telemetry.addData("Flywheel Velocity", shooter.getCurrentVelocity());
             telemetry.addData("Flywheel State", shooter.getState());
             telemetry.addData("Target Velocity", shooter.getTargetVelocity());
+            telemetry.addLine();
             telemetry.update();
         }
     }

@@ -15,9 +15,10 @@ public class Shooter {
 
     private FlywheelState state = FlywheelState.IDLE;
 
-    private double targetHoodPosition;
-    private double targetVelocity;
-    private boolean isReady;
+    private double targetHoodPosition = 0;
+    private double targetVelocity = 0;
+
+    private long hoodElapsedTime;
 
     public Shooter(DcMotorEx flywheel, Servo hood, CRServo turret) {
         this.flywheel = flywheel;
@@ -28,7 +29,7 @@ public class Shooter {
             this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
         if (this.hood != null) {
-            this.setHoodPosition(0); //start at zero
+            this.setHoodPosition(targetHoodPosition);
         }
     }
 
@@ -60,15 +61,10 @@ public class Shooter {
 
     public void setState(FlywheelState state) {
         this.state = state;
-        //should only set value (state)
-        //update should be running constntly regardlss of ths
     }
 
     public void setTargetVelocity(double velocity) {
         this.targetVelocity = Math.max(0, velocity);
-        //selects whichever is larger, 0 or velocity
-        //if distance alculation (future) gives neg val,
-        //prevent flywheel from reversing
         flywheel.setVelocity(this.targetVelocity);
     }
 
@@ -76,6 +72,20 @@ public class Shooter {
         targetHoodPosition = Math.max(0.0, Math.min(1.0, position));
         if (hood != null) {
             hood.setPosition(targetHoodPosition);
+        }
+    }
+
+    public void hoodUp() {
+        if (System.currentTimeMillis() - hoodElapsedTime > 100) {
+            setHoodPosition(targetHoodPosition + 0.1);
+            hoodElapsedTime = System.currentTimeMillis();
+        }
+    }
+
+    public void hoodDown() {
+        if (System.currentTimeMillis() - hoodElapsedTime > 100) {
+            setHoodPosition(targetHoodPosition - 0.1);
+            hoodElapsedTime = System.currentTimeMillis();
         }
     }
 
