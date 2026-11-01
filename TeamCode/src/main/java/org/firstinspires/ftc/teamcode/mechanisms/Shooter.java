@@ -32,8 +32,30 @@ public class Shooter {
         }
     }
 
-    public boolean isReady() { //allows opmode to check readiness of flywheel
-        return isReady;
+    public FlywheelState getState() { //allows opmode to check readiness of flywheel
+        double velocityError = Math.abs(targetVelocity - flywheel.getVelocity()); //previous code (flywheel.getVelocity() >= targetVelocity * 0.95) set state ready as long as min speed reached. that can cause uncorrected overshooting
+
+        if (flywheel.getVelocity() == 0 && targetVelocity == 0) {
+            setState(FlywheelState.IDLE);
+            return state;
+        }
+        if (velocityError <= targetVelocity * 0.05) {
+            state = FlywheelState.READY;
+            return state;
+        }
+        if (velocityError > targetVelocity * 0.10) {
+            state = FlywheelState.SPINNING;
+            return state;
+        }
+        return state;
+    }
+
+    public double getCurrentVelocity() {
+        return flywheel.getVelocity();
+    }
+
+    public double getTargetVelocity() {
+        return targetVelocity;
     }
 
     public void setState(FlywheelState state) {
@@ -47,6 +69,7 @@ public class Shooter {
         //selects whichever is larger, 0 or velocity
         //if distance alculation (future) gives neg val,
         //prevent flywheel from reversing
+        flywheel.setVelocity(this.targetVelocity);
     }
 
     public void setHoodPosition(double position) {
@@ -60,34 +83,6 @@ public class Shooter {
         if (turret != null) {
             turret.setPower(turretPower);
 
-        }
-    }
-
-    public void update() {
-        if (flywheel == null) return;
-        double velocityError = Math.abs(targetVelocity - flywheel.getVelocity()); //previous code (flywheel.getVelocity() >= targetVelocity * 0.95) set state ready as long as min speed reached. that can cause uncorrected overshooting
-
-        switch (state) {
-            case IDLE:
-                flywheel.setVelocity(0);
-                isReady = false;
-                break;
-
-            case SPINNING:
-                flywheel.setVelocity(targetVelocity);
-                if (velocityError <= targetVelocity * 0.05) { //now waits until error is reasonabe
-                    state = FlywheelState.READY; //auto transition
-                    isReady = true;
-                }
-                break;
-
-            case READY:
-                flywheel.setVelocity(targetVelocity);
-                if (velocityError > targetVelocity * 0.10) {
-                    state = FlywheelState.SPINNING;
-                    isReady = false;
-                }
-                break;
         }
     }
 }

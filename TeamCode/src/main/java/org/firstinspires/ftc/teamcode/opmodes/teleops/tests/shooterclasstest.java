@@ -28,9 +28,9 @@ public class shooterclasstest extends LinearOpMode {
         while (opModeIsActive()) {
 
             if (gamepad1.circle) {
-                shooter.setState(Shooter.FlywheelState.SPINNING);
+                shooter.setTargetVelocity(1000);
             } else {
-                shooter.setState(Shooter.FlywheelState.IDLE);
+                shooter.setTargetVelocity(0);
             }
 
             if (gamepad1.dpad_down) {
@@ -45,7 +45,11 @@ public class shooterclasstest extends LinearOpMode {
                 hood.setPosition(0);
             }
 
-            shooter.update();
+
+            telemetry.addData("Flywheel Velocity", shooter.getCurrentVelocity());
+            telemetry.addData("Flywheel State", shooter.getState());
+            telemetry.addData("Target Velocity", shooter.getTargetVelocity());
+            telemetry.update();
         }
     }
 }
