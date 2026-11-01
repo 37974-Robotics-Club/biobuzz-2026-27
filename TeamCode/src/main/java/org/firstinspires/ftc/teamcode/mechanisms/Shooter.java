@@ -15,6 +15,7 @@ public class Shooter {
 
     private FlywheelState state = FlywheelState.IDLE;
 
+    private double targetHoodPosition;
     private double targetVelocity;
     private boolean isReady;
 
@@ -49,8 +50,9 @@ public class Shooter {
     }
 
     public void setHoodPosition(double position) {
+        targetHoodPosition = Math.max(0.0, Math.min(1.0, position));
         if (hood != null) {
-            hood.setPosition(Math.max(0.0, Math.min(1.0, position)));
+            hood.setPosition(targetHoodPosition);
         }
     }
 
