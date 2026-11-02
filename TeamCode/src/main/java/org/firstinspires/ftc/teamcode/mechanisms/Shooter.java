@@ -33,8 +33,8 @@ public class Shooter {
         }
     }
 
-    public FlywheelState getState() { //allows opmode to check readiness of flywheel
-        double velocityError = Math.abs(targetVelocity - flywheel.getVelocity()); //previous code (flywheel.getVelocity() >= targetVelocity * 0.95) set state ready as long as min speed reached. that can cause uncorrected overshooting
+    public FlywheelState getState() {
+        double velocityError = Math.abs(targetVelocity - flywheel.getVelocity());
 
         if (flywheel.getVelocity() == 0 && targetVelocity == 0) {
             setState(FlywheelState.IDLE);
