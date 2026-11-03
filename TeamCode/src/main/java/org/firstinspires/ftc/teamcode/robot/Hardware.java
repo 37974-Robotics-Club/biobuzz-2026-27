@@ -20,6 +20,7 @@ public class Hardware {
     public DcMotorEx frontLeft;
     public DcMotorEx backRight;
     public DcMotorEx backLeft;
+    public DcMotorEx intake;
     public DcMotorEx pollenFlywheel;
     public DcMotorEx nectarFlywheel;
     public Servo pollenHood;
@@ -34,6 +35,7 @@ public class Hardware {
         frontLeft = hardwareMap.get(DcMotorEx.class, "frontLeft");
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
+        intake = hardwareMap.get(DcMotorEx.class, "intake");
         pollenFlywheel = hardwareMap.get(DcMotorEx.class, "pollenFlywheel");
         nectarFlywheel = hardwareMap.get(DcMotorEx.class, "nectarFlywheel");
         pollenHood = hardwareMap.get(Servo.class, "pollenHood");
@@ -46,6 +48,7 @@ public class Hardware {
         backLeft.setDirection(DcMotorSimple.Direction.REVERSE);
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
+        intake.setDirection(DcMotorSimple.Direction.FORWARD);
         pollenFlywheel.setDirection(DcMotorSimple.Direction.FORWARD);
         nectarFlywheel.setDirection(DcMotorSimple.Direction.FORWARD);
         pollenTurret.setDirection(CRServo.Direction.FORWARD);
@@ -56,6 +59,7 @@ public class Hardware {
         frontRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         pollenFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         nectarFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
@@ -63,6 +67,7 @@ public class Hardware {
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pollenFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         nectarFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
