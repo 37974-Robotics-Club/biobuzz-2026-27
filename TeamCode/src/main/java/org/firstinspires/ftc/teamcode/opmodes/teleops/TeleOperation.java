@@ -27,7 +27,7 @@ public class TeleOperation extends LinearOpMode {
         } else {
             robot.intake.setState(Intake.IntakeState.IDLE);
         }
-        if (gamepad1.share) {
+        if (gamepad2.share) {
             robot.hardware.imu.resetYaw();
         }
 
