@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.robot;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
+import org.firstinspires.ftc.teamcode.mechanisms.Pusher;
 
 public class Robot {
 
@@ -12,6 +13,7 @@ public class Robot {
     public final Hardware hardware;
 
     public final Drivetrain drivetrain;
+    public final Pusher pusher;
 
     public Robot(HardwareMap hardwareMap) {
 
@@ -25,6 +27,8 @@ public class Robot {
                 hardware.backRight,
                 hardware.imu
         );
+
+        pusher = new Pusher(hardware.pusher);
 
     }
 }

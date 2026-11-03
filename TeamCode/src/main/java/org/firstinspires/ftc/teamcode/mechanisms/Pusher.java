@@ -18,7 +18,7 @@ public class Pusher {
 
     public Pusher(DcMotorEx pusher) {
         this.pusherMotor = pusher;
-        this.pusherMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
+        this.pusherMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
     public void setState (PusherState state) {
