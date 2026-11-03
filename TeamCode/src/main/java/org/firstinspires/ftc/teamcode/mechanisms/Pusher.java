@@ -10,8 +10,8 @@ public class Pusher {
 
     public enum PusherState {
         IDLE,
-        LAUNCH,
-        PULL
+        FEEDING,
+        REVERSE
     }
 
     private PusherState currentState = PusherState.IDLE;
@@ -28,11 +28,11 @@ public class Pusher {
                 pusherMotor.setPower(0);
                 break;
 
-            case LAUNCH:
+            case FEEDING:
                 pusherMotor.setPower(1);
                 break;
 
-            case PULL:
+            case REVERSE:
                 pusherMotor.setPower(-1);
                 break;
         }

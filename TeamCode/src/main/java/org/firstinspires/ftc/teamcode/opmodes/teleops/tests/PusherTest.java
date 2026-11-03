@@ -21,10 +21,10 @@ public class PusherTest extends LinearOpMode {
 
         while (opModeIsActive()) {
             if (gamepad1.circle) {
-                pusher.setState(Pusher.PusherState.LAUNCH);
+                pusher.setState(Pusher.PusherState.FEEDING);
 
             } else if (gamepad1.square) {
-                pusher.setState(Pusher.PusherState.PULL);
+                pusher.setState(Pusher.PusherState.REVERSE);
             } else {
                 pusher.setState(Pusher.PusherState.IDLE);
             }
