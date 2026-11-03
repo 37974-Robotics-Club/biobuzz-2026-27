@@ -12,7 +12,8 @@ public class Robot {
      */
     public final Hardware hardware;
     public final Drivetrain drivetrain;
-    public final Shooter shooter;
+    public final Shooter pollenShooter;
+    public final Shooter nectarShooter;
 
     public Robot(HardwareMap hardwareMap) {
 
@@ -27,10 +28,16 @@ public class Robot {
                 hardware.imu
         );
 
-        shooter = new Shooter(
-                hardware.flywheel,
-                hardware.hood,
-                hardware.turret
+        pollenShooter = new Shooter(
+                hardware.pollenFlywheel,
+                hardware.pollenHood,
+                hardware.pollenTurret
+        );
+
+        nectarShooter = new Shooter(
+                hardware.nectarFlywheel,
+                hardware.nectarHood,
+                hardware.nectarTurret
         );
 
     }
