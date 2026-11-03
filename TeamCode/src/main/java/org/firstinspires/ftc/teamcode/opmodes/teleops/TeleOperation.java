@@ -27,16 +27,12 @@ public class TeleOperation extends LinearOpMode {
         } else {
             robot.intake.setState(Intake.IntakeState.IDLE);
         }
+        if (gamepad1.share) {
+            robot.hardware.imu.resetYaw();
+        }
 
-            if (gamepad1.share) {
-                robot.hardware.imu.resetYaw();
-            }
-
-            telemetry.addData("Heading",
-                    robot.hardware.imu.getRobotYawPitchRollAngles().getYaw(
-                            org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES
-                    )
-            );
-            telemetry.update();
+        telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
+                .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
+        telemetry.update();
         }
     }
