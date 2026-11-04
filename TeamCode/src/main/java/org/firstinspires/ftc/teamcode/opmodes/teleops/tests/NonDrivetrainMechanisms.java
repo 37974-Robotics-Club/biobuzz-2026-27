@@ -23,7 +23,7 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
         while (opModeIsActive()) {
 
             pusher.update(shooter.isReady(), gamepad1.right_bumper);
-
+            shooter.setTargetVelocity(2000);
 
             if (gamepad1.a) {
                 robot.intake.setState(Intake.IntakeState.INTAKE);
@@ -38,6 +38,10 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
 
             telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
                     .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
+            telemetry.addLine();
+            telemetry.addData("Intake State", robot.intake.getState());
+            telemetry.addData("Pusher State", pusher.getState());
+            telemetry.addData("Shooter State", shooter.getState());
             telemetry.update();
 
         }
