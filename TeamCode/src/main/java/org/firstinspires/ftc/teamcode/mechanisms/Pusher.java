@@ -30,6 +30,7 @@ public class Pusher {
     }
 
     public void setState (PusherState state) {
+        if (currentState == state) return;
         currentState = state;
         switch (currentState) {
             case IDLE:
