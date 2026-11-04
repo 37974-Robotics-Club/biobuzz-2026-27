@@ -21,6 +21,7 @@ public class Intake {
     }
 
     public void setState (IntakeState state) {
+        if (currentState == state) return;
         currentState = state;
         switch (currentState) {
             case IDLE:
