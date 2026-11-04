@@ -18,21 +18,23 @@ public class TeleOperation extends LinearOpMode {
 
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             // robot centric available
+
+            if (gamepad1.a) {
+                robot.intake.setState(Intake.IntakeState.INTAKE);
+            } else if (gamepad1.b) {
+                robot.intake.setState(Intake.IntakeState.OUTTAKE);
+            } else {
+                robot.intake.setState(Intake.IntakeState.IDLE);
+            }
+            if (gamepad2.share) {
+                robot.hardware.imu.resetYaw();
+            }
+
+            telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
+                    .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
+            telemetry.update();
         }
 
-        if (gamepad1.a) {
-            robot.intake.setState(Intake.IntakeState.INTAKE);
-        } else if (gamepad1.b) {
-            robot.intake.setState(Intake.IntakeState.OUTTAKE);
-        } else {
-            robot.intake.setState(Intake.IntakeState.IDLE);
-        }
-        if (gamepad2.share) {
-            robot.hardware.imu.resetYaw();
-        }
 
-        telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
-                .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
-        telemetry.update();
         }
     }
