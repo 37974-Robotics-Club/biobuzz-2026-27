@@ -29,6 +29,10 @@ public class Pusher {
         }
     }
 
+    public boolean isFeeding() {
+        return currentState == PusherState.FEEDING;
+    }
+
     public void setState (PusherState state) {
         if (currentState == state) return;
         currentState = state;
