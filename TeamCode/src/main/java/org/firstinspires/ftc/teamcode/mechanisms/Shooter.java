@@ -51,6 +51,10 @@ public class Shooter {
         return state;
     }
 
+    public boolean isReady() {
+        return getState() == FlywheelState.READY;
+    }
+
     public double getCurrentVelocity() {
         return flywheel.getVelocity();
     }
