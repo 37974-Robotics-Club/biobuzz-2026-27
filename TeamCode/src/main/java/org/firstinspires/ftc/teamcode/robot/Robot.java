@@ -4,6 +4,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
 import org.firstinspires.ftc.teamcode.mechanisms.Pusher;
+import org.firstinspires.ftc.teamcode.mechanisms.Intake;
+import org.firstinspires.ftc.teamcode.mechanisms.Shooter;
 
 public class Robot {
 
@@ -11,9 +13,11 @@ public class Robot {
      * represents the whole robot by initializing hardware and "compiling" all the mechanisms together
      */
     public final Hardware hardware;
-
     public final Drivetrain drivetrain;
+    public final Shooter pollenShooter;
+    public final Shooter nectarShooter;
     public final Pusher pusher;
+    public final Intake intake;
 
     public Robot(HardwareMap hardwareMap) {
 
@@ -29,6 +33,20 @@ public class Robot {
         );
 
         pusher = new Pusher(hardware.pusher);
+      
+        intake = new Intake(hardware.intake);
+      
+        pollenShooter = new Shooter(
+                hardware.pollenFlywheel,
+                hardware.pollenHood,
+                hardware.pollenTurret
+        );
+
+        nectarShooter = new Shooter(
+                hardware.nectarFlywheel,
+                hardware.nectarHood,
+                hardware.nectarTurret
+        );
 
     }
 }
