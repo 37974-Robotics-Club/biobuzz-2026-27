@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp
-public class motorservotest  extends LinearOpMode {
+public class ActuatorTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
