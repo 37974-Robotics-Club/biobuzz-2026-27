@@ -12,7 +12,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
 import org.firstinspires.ftc.robotcore.external.navigation.YawPitchRollAngles;
 
 @TeleOp(name = "limelightTest")
-public class limelightTest extends OpMode{
+public class limelightAprilTagDistance extends OpMode{
 
     private Limelight3A limelight;
     private IMU imu;
