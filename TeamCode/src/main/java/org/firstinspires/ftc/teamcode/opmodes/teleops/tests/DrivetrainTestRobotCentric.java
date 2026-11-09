@@ -2,12 +2,17 @@ package org.firstinspires.ftc.teamcode.opmodes.teleops.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.mechanisms.SlewRateLimiter;
+
 @TeleOp(group = "tests")
 public class DrivetrainTestRobotCentric extends LinearOpMode {
+
+    private final SlewRateLimiter driveLimiter = new SlewRateLimiter(2.0);
+    private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(2.0);
+
     @Override
     public void runOpMode() throws InterruptedException {
 
@@ -25,15 +30,23 @@ public class DrivetrainTestRobotCentric extends LinearOpMode {
         if (isStopRequested()) return;
 
         while (opModeIsActive()) {
-            double y = -gamepad1.left_stick_y;
-            double x = gamepad1.left_stick_x * 1.1;
-            double rx = gamepad1.right_stick_x;
+            double rawDrive = -gamepad1.left_stick_y;
+            double rawStrafe = gamepad1.left_stick_x;
+            double rawTurn = gamepad1.right_stick_x;
 
-            double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-            double frontLeftPower = (y + x + rx) / denominator;
-            double backLeftPower = (y - x + rx) / denominator;
-            double frontRightPower = (y - x - rx) / denominator;
-            double backRightPower = (y + x - rx) / denominator;
+            double smoothedDrive = driveLimiter.calculate(rawDrive);
+            double smoothedStrafe = strafeLimiter.calculate(rawStrafe);
+            double smoothedTurn = rawTurn;
+
+            smoothedStrafe *= 1.1;
+
+            double denominator = Math.max(Math.abs(smoothedDrive) + Math.abs(smoothedStrafe) + Math.abs(smoothedTurn), 1.0);
+            double speedLimit = 0.8;
+
+            double frontLeftPower = ((smoothedDrive + smoothedStrafe + smoothedTurn) / denominator) * speedLimit;
+            double backLeftPower = ((smoothedDrive - smoothedStrafe + smoothedTurn) / denominator) * speedLimit;
+            double frontRightPower = ((smoothedDrive - smoothedStrafe - smoothedTurn) / denominator) * speedLimit;
+            double backRightPower = ((smoothedDrive + smoothedStrafe - smoothedTurn) / denominator) * speedLimit;
 
             frontLeft.setPower(frontLeftPower);
             backLeft.setPower(backLeftPower);
