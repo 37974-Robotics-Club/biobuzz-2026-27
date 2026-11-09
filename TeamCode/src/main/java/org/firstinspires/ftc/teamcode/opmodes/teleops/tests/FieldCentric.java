@@ -11,7 +11,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(group = "tests")
-public class DrivetrainTestFieldCentric extends LinearOpMode {
+public class FieldCentric extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 

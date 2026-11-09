@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import org.firstinspires.ftc.teamcode.mechanisms.SlewRateLimiter;
 
 @TeleOp(group = "tests")
-public class DrivetrainTestRobotCentric extends LinearOpMode {
+public class RobotCentric extends LinearOpMode {
 
     private final SlewRateLimiter driveLimiter = new SlewRateLimiter(2.0);
     private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(2.0);
