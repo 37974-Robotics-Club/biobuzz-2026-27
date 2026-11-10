@@ -12,6 +12,7 @@ public class RobotCentric extends LinearOpMode {
 
     private final SlewRateLimiter driveLimiter = new SlewRateLimiter(2.0);
     private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(2.0);
+    private final SlewRateLimiter turnLimiter = new SlewRateLimiter(2.0);
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,7 +37,7 @@ public class RobotCentric extends LinearOpMode {
 
             double smoothedDrive = driveLimiter.calculate(rawDrive);
             double smoothedStrafe = strafeLimiter.calculate(rawStrafe);
-            double smoothedTurn = rawTurn;
+            double smoothedTurn = turnLimiter.calculate(rawTurn);
 
             smoothedStrafe *= 1.1;
 
