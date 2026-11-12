@@ -34,7 +34,7 @@ public class Robot {
 
         pusher = new Pusher(hardware.pusher);
       
-        intake = new Intake(hardware.intake);
+        intake = new Intake(hardware.intake, hardware.intakeDrop);
       
         pollenShooter = new Shooter(
                 hardware.pollenFlywheel,

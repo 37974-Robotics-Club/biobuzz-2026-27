@@ -15,6 +15,7 @@ public class TeleOperation extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
+            robot.intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             // robot centric available
@@ -24,7 +25,7 @@ public class TeleOperation extends LinearOpMode {
             } else if (gamepad1.b) {
                 robot.intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
-                robot.intake.setState(Intake.IntakeState.IDLE);
+                robot.intake.setState(Intake.IntakeState.DOWN_IDLE);
             }
             if (gamepad2.share) {
                 robot.hardware.imu.resetYaw();

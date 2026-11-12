@@ -30,7 +30,7 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
             } else if (gamepad1.b) {
                 robot.intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
-                robot.intake.setState(Intake.IntakeState.IDLE);
+                robot.intake.setState(Intake.IntakeState.DOWN_IDLE);
             }
             if (gamepad2.share) {
                 robot.hardware.imu.resetYaw();

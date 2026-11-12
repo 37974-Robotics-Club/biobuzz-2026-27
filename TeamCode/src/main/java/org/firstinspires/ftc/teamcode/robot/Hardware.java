@@ -30,6 +30,7 @@ public class Hardware {
   
     public DcMotorEx pusher;
     public DcMotorEx intake;
+    public Servo intakeDrop;
   
     public IMU imu;
 
@@ -48,6 +49,7 @@ public class Hardware {
         nectarTurret = hardwareMap.get(CRServo.class, "nectarTurret");
         pusher = hardwareMap.get(DcMotorEx.class, "pusher");
         intake = hardwareMap.get(DcMotorEx.class, "intake");
+        intakeDrop = hardwareMap.get(Servo.class, "intakeDrop");
 
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
