@@ -18,6 +18,7 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
         Shooter shooter = new Shooter(robot.hardware.pollenFlywheel,
                 robot.hardware.pollenHood,
                 robot.hardware.pollenTurret);
+        Intake intake = new Intake(robot.hardware.intake, robot.hardware.intakeDrop);
         waitForStart();
 
         while (opModeIsActive()) {
@@ -26,11 +27,11 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
             shooter.setTargetVelocity(2000);
 
             if (gamepad1.a) {
-                robot.intake.setState(Intake.IntakeState.INTAKE);
+                intake.setState(Intake.IntakeState.INTAKE);
             } else if (gamepad1.b) {
-                robot.intake.setState(Intake.IntakeState.OUTTAKE);
+                intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
-                robot.intake.setState(Intake.IntakeState.DOWN_IDLE);
+                intake.setState(Intake.IntakeState.DOWN_IDLE);
             }
             if (gamepad2.share) {
                 robot.hardware.imu.resetYaw();
@@ -39,7 +40,7 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
             telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
                     .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
             telemetry.addLine();
-            telemetry.addData("Intake State", robot.intake.getState());
+            telemetry.addData("Intake State", intake.getState());
             telemetry.addData("Pusher State", pusher.getState());
             telemetry.addData("Shooter State", shooter.getState());
             telemetry.update();

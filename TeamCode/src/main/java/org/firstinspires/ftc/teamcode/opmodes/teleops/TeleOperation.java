@@ -12,20 +12,21 @@ public class TeleOperation extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap);
+        Intake intake = new Intake(robot.hardware.intake, robot.hardware.intakeDrop);
         waitForStart();
 
         while (opModeIsActive()) {
-            robot.intake.setState(Intake.IntakeState.DOWN_IDLE);
+            intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
             // robot centric available
 
             if (gamepad1.a) {
-                robot.intake.setState(Intake.IntakeState.INTAKE);
+                intake.setState(Intake.IntakeState.INTAKE);
             } else if (gamepad1.b) {
-                robot.intake.setState(Intake.IntakeState.OUTTAKE);
+                intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
-                robot.intake.setState(Intake.IntakeState.DOWN_IDLE);
+                intake.setState(Intake.IntakeState.DOWN_IDLE);
             }
             if (gamepad2.share) {
                 robot.hardware.imu.resetYaw();
