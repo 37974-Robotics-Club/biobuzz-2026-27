@@ -9,6 +9,10 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 public class Drivetrain {
 
+    private final SlewRateLimiter driveLimiter = new SlewRateLimiter(2.0);
+    private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(2.0);
+    private final SlewRateLimiter turnLimiter = new SlewRateLimiter(2.0);
+
     private final DcMotorEx frontLeft;
     private final DcMotorEx frontRight;
     private final DcMotorEx backLeft;
@@ -23,15 +27,21 @@ public class Drivetrain {
         this.imu = imu;
     }
 
-    public void robotCentricDrive(double strafe, double forward, double rotation) {
+    public void robotCentricDrive(double rawStrafe, double rawDrive, double rawTurn) {
 
-        strafe *= STRAFE_COMPENSATION;
+        double smoothedDrive = driveLimiter.calculate(rawDrive);
+        double smoothedStrafe = strafeLimiter.calculate(rawStrafe);
+        double smoothedTurn = turnLimiter.calculate(rawTurn);
 
-        double denominator = Math.max(Math.abs(forward) + Math.abs(strafe) + Math.abs(rotation), 1);
-        double frontLeftPower = (forward + strafe + rotation) / denominator;
-        double backLeftPower = (forward - strafe + rotation) / denominator;
-        double frontRightPower = (forward - strafe - rotation) / denominator;
-        double backRightPower = (forward + strafe - rotation) / denominator;
+        smoothedStrafe *= 1.1;
+
+        double denominator = Math.max(Math.abs(smoothedDrive) + Math.abs(smoothedStrafe) + Math.abs(smoothedTurn), 1.0);
+        double speedLimit = 0.8;
+
+        double frontLeftPower = ((smoothedDrive + smoothedStrafe + smoothedTurn) / denominator) * speedLimit;
+        double backLeftPower = ((smoothedDrive - smoothedStrafe + smoothedTurn) / denominator) * speedLimit;
+        double frontRightPower = ((smoothedDrive - smoothedStrafe - smoothedTurn) / denominator) * speedLimit;
+        double backRightPower = ((smoothedDrive + smoothedStrafe - smoothedTurn) / denominator) * speedLimit;
 
         frontLeft.setPower(frontLeftPower);
         backLeft.setPower(backLeftPower);

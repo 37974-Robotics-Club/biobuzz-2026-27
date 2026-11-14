@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
+import org.firstinspires.ftc.teamcode.mechanisms.Pusher;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
 @TeleOp
@@ -13,6 +14,8 @@ public class TeleOperation extends LinearOpMode {
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap);
         Intake intake = new Intake(robot.hardware.intake, robot.hardware.intakeDrop);
+        Pusher pusher = new Pusher(robot.hardware.pusher);
+
         waitForStart();
 
         while (opModeIsActive()) {
@@ -27,6 +30,12 @@ public class TeleOperation extends LinearOpMode {
                 intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
                 intake.setState(Intake.IntakeState.DOWN_IDLE);
+            }
+
+            if (gamepad1.dpad_up) {
+                pusher.setState(Pusher.PusherState.FEEDING);
+            } else {
+                pusher.setState(Pusher.PusherState.IDLE);
             }
             if (gamepad2.share) {
                 robot.hardware.imu.resetYaw();
