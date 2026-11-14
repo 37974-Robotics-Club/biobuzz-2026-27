@@ -6,11 +6,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 //state machines are life.
 public class Intake {
+    private  final SlewRateLimiter intakeLimiter = new SlewRateLimiter(2.0);
+
     private DcMotorEx intakeMotor;
     private Servo intakeDrop;
 
     public double intakeDownPosition = 0;
     public double intakeUpPosition = 1;
+
+    public double intakeTargetPower = 0;
 
     public enum IntakeState {
         UP,
@@ -32,30 +36,41 @@ public class Intake {
         currentState = state;
         switch (currentState) {
             case UP:
-                intakeMotor.setPower(0);
+                intakeTargetPower = 0;
                 intakeDrop.setPosition(intakeUpPosition);
                 break;
+
             case DOWN_IDLE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() <= 0.25) {
-                    intakeMotor.setPower(0);
+                    intakeTargetPower = 0;
                 }
                 break;
 
             case INTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() <= 0.25) {
-                    intakeMotor.setPower(1);
+                    intakeTargetPower = 0.9;
                 }
                 break;
 
             case OUTTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() <= 0.25) {
-                    intakeMotor.setPower(-1);
+                    intakeTargetPower = -0.9;
                 }
                 break;
         }
+    }
+
+    public void update() {
+        double smoothedPower = intakeLimiter.calculate(intakeTargetPower);
+
+        if (currentState == IntakeState.UP) {
+            smoothedPower = 0;
+            intakeLimiter.reset();
+        }
+        intakeMotor.setPower(smoothedPower);
     }
 
     public void setIntakeDrop() {
