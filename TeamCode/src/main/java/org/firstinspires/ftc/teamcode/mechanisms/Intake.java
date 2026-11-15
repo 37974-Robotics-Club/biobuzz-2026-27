@@ -25,7 +25,7 @@ public class Intake {
         OUTTAKE
     }
 
-    private IntakeState currentState = IntakeState.DOWN_IDLE;
+    private IntakeState currentState = IntakeState.UP;
 
     public Intake(DcMotorEx intake, Servo intakeDrop) {
         this.intakeMotor = intake;
