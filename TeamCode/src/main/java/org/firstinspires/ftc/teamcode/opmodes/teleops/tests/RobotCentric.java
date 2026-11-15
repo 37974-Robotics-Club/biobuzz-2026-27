@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
-import org.firstinspires.ftc.teamcode.mechanisms.SlewRateLimiter;
+import org.firstinspires.ftc.teamcode.robot.SlewRateLimiter;
 
 @TeleOp(group = "tests")
 public class RobotCentric extends LinearOpMode {

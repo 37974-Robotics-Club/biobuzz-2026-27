@@ -4,6 +4,8 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
 
+import org.firstinspires.ftc.teamcode.robot.SlewRateLimiter;
+
 //state machines are life.
 public class Intake {
     private  final SlewRateLimiter intakeLimiter = new SlewRateLimiter(2.0);

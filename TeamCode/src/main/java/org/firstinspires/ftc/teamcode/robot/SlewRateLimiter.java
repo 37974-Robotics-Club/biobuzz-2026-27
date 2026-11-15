@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.mechanisms;
+package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class SlewRateLimiter {
-    private final double maxRate; // Units per second
+    private final double maxRate;
     private double lastValue = 0.0;
     private final ElapsedTime timer = new ElapsedTime();
 
@@ -17,16 +17,14 @@ public class SlewRateLimiter {
     }
 
     public double calculate(double targetValue) {
-        double dt = timer.seconds();
+        double elapsedTimeSeconds = timer.seconds();
         timer.reset();
 
-        // Guard against initial loop spikes or hangs
-        if (dt > 0.2) dt = 0.02;
+        if (elapsedTimeSeconds > 0.2) elapsedTimeSeconds = 0.02;
 
-        double maxChange = maxRate * dt;
+        double maxChange = maxRate * elapsedTimeSeconds;
         double error = targetValue - lastValue;
 
-        // Constrain the change to the maximum allowed step
         double step = Math.max(-maxChange, Math.min(maxChange, error));
 
         lastValue += step;
