@@ -36,7 +36,7 @@ public class TeleOperation extends LinearOpMode {
             } else {
                 pusher.setState(Pusher.PusherState.IDLE);
             }
-            if (gamepad2.share) {
+            if (gamepad1.share) {
                 robot.hardware.imu.resetYaw();
             }
 
@@ -45,6 +45,7 @@ public class TeleOperation extends LinearOpMode {
 
             telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
                     .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
+            telemetry.addLine("gp1 - share to reset heading");
             telemetry.update();
         }
 
