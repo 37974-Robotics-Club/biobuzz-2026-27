@@ -10,28 +10,20 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.mechanisms.Shooter;
 
 @TeleOp
-public class shooterclasstest extends LinearOpMode {
+public class servoTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
 
-        DcMotorEx motor = hardwareMap.get(DcMotorEx.class, "flywheel");
 
         CRServo turret = hardwareMap.get(CRServo.class, "turret");
 
-        Servo hood = hardwareMap.get(Servo.class, "hood");
+        CRServo hood = hardwareMap.get(CRServo.class, "hood");
 
-        Shooter shooter = new Shooter(motor, hood, turret);
 
         waitForStart();
 
         while (opModeIsActive()) {
-
-            if (gamepad1.rightBumperWasPressed()) {
-                shooter.setTargetVelocity(2000);
-            } else {
-                shooter.setTargetVelocity(0);
-            }
 
             if (gamepad1.circle) {
                 turret.setPower(1);
@@ -40,16 +32,11 @@ public class shooterclasstest extends LinearOpMode {
             }
 
             if (gamepad1.dpad_up) {
-                shooter.hoodUp();
+                hood.setPower(1);
             } else if (gamepad1.dpad_down) {
-                shooter.hoodDown();
+                hood.setPower(0);
             }
 
-
-            telemetry.addData("Flywheel Velocity", shooter.getCurrentVelocity());
-            telemetry.addData("Flywheel State", shooter.getState());
-            telemetry.addData("Target Velocity", shooter.getTargetVelocity());
-            telemetry.addLine();
             telemetry.update();
         }
     }

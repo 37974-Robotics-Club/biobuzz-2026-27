@@ -35,7 +35,7 @@ public class Drivetrain {
         smoothedStrafe *= 1.1;
 
         double denominator = Math.max(Math.abs(smoothedDrive) + Math.abs(smoothedStrafe) + Math.abs(smoothedTurn), 1.0);
-        double speedLimit = 0.8;
+        double speedLimit = 0.9;
 
         double frontLeftPower = ((smoothedDrive + smoothedStrafe + smoothedTurn) / denominator) * speedLimit;
         double backLeftPower = ((smoothedDrive - smoothedStrafe + smoothedTurn) / denominator) * speedLimit;

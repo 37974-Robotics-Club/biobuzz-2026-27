@@ -41,7 +41,12 @@ public class TeleOperation extends LinearOpMode {
             }
 
             intake.update();
-            //pusher.update(robot.pollenShooter.isReady(), gamepad1.dpad_up);
+
+            pusher.update(robot.pollenShooter.isReady(), gamepad1.dpad_up);
+            if (robot.pollenShooter.isReady()) {
+                gamepad1.rumble(500);
+            }
+
 
             telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
                     .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));

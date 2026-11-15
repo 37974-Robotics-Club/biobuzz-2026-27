@@ -44,21 +44,21 @@ public class Intake {
 
             case DOWN_IDLE:
                 intakeDrop.setPosition(intakeDownPosition);
-                if (intakeDrop.getPosition() <= 0.25) {
+                if (intakeDrop.getPosition() == intakeDownPosition) {
                     intakeTargetPower = 0;
                 }
                 break;
 
             case INTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
-                if (intakeDrop.getPosition() <= 0.25) {
+                if (intakeDrop.getPosition() == intakeDownPosition) {
                     intakeTargetPower = 0.9;
                 }
                 break;
 
             case OUTTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
-                if (intakeDrop.getPosition() <= 0.25) {
+                if (intakeDrop.getPosition() == intakeDownPosition) {
                     intakeTargetPower = -0.9;
                 }
                 break;
