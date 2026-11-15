@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.opmodes.autons.tests;
+package org.firstinspires.ftc.teamcode.opmodes.autons.pedropaths;
 
-import static com.pedropathing.api.Paths.*;
 import com.pedropathing.api.Paths;
 
 import com.pedropathing.api.PoseFactory;
@@ -10,7 +9,6 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,14 +17,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous
-public class RedDownPark extends LinearOpMode {
+public class BlueUpPark extends LinearOpMode {
 
     private Follower follower;
 
-    private final PoseFactory poseFactory = PoseFactory.degrees().mirrorY(70.75).mirrorX(70.75);
+    private final PoseFactory poseFactory = PoseFactory.degrees();
 
-    private final Pose start = poseFactory.of(35.3379, 130.913, 90);
-    private final Pose path1 = poseFactory.of(13.263, 116.176, -146.2733);
+    private final Pose start = poseFactory.of(56.921, 8.0844, 90);
+    private final Pose path1 = poseFactory.of(10.1779, 96.4262, 94.7168);
+    private final Pose path1Control1 = poseFactory.of(26.7595, 7.968, 0);
+    private final Pose path1Control2 = poseFactory.of(12.8773, 63.7099, 0);
 
     // Autonomous routine
     public Command autoRoutine() {
@@ -63,6 +63,6 @@ public class RedDownPark extends LinearOpMode {
     }
 
     public Path path1() {
-        return Paths.line(start, path1).tangent();
+        return Paths.curve(start, path1Control1, path1Control2, path1).tangent();
     }
 }

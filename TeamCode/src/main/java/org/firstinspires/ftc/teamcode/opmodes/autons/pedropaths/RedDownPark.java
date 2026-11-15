@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.opmodes.autons.tests;
+package org.firstinspires.ftc.teamcode.opmodes.autons.pedropaths;
 
-import static com.pedropathing.api.Paths.*;
 import com.pedropathing.api.Paths;
 
 import com.pedropathing.api.PoseFactory;
@@ -10,7 +9,6 @@ import com.pedropathing.paths.Path;
 import com.pedropathing.ivy.Command;
 import com.pedropathing.ivy.Scheduler;
 import static com.pedropathing.ivy.Scheduler.schedule;
-import static com.pedropathing.ivy.commands.Commands.*;
 import static com.pedropathing.ivy.groups.Groups.sequential;
 import static com.pedropathing.ivy.pedro.PedroCommands.follow;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,11 +17,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous
-public class BlueDownPark extends LinearOpMode {
+public class RedDownPark extends LinearOpMode {
 
     private Follower follower;
 
-    private final PoseFactory poseFactory = PoseFactory.degrees();
+    private final PoseFactory poseFactory = PoseFactory.degrees().mirrorY(70.75).mirrorX(70.75);
 
     private final Pose start = poseFactory.of(35.3379, 130.913, 90);
     private final Pose path1 = poseFactory.of(13.263, 116.176, -146.2733);

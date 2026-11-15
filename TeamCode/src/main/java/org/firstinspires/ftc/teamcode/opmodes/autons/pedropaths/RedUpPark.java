@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.opmodes.autons.tests;
+package org.firstinspires.ftc.teamcode.opmodes.autons.pedropaths;
 
 import com.pedropathing.api.Paths;
 
@@ -17,14 +17,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.pedro.Constants;
 
 @Autonomous
-public class TestPath extends LinearOpMode {
+public class RedUpPark extends LinearOpMode {
 
     private Follower follower;
 
-    private final PoseFactory poseFactory = PoseFactory.degrees();
+    private final PoseFactory poseFactory = PoseFactory.degrees().mirrorX(70.75).mirrorY(70.75);
 
-    private final Pose start = poseFactory.of(56.3912, 8.0844, 90);
-    private final Pose path1 = poseFactory.of(7.7055, 7.7735, 180);
+    private final Pose start = poseFactory.of(56.921, 8.0844, 90);
+    private final Pose path1 = poseFactory.of(10.1779, 96.4262, 94.7168);
+    private final Pose path1Control1 = poseFactory.of(26.7595, 7.968, 0);
+    private final Pose path1Control2 = poseFactory.of(12.8773, 63.7099, 0);
 
     // Autonomous routine
     public Command autoRoutine() {
@@ -61,6 +63,6 @@ public class TestPath extends LinearOpMode {
     }
 
     public Path path1() {
-        return Paths.line(start, path1).constant(path1);
+        return Paths.curve(start, path1Control1, path1Control2, path1).tangent();
     }
 }
