@@ -71,13 +71,11 @@ public class Intake {
         if (currentState == IntakeState.UP) {
             smoothedPower = 0;
             intakeLimiter.reset();
+        } else {
+            intakeMotor.setPower(smoothedPower);
         }
-        intakeMotor.setPower(smoothedPower);
     }
 
-    public void setIntakeDrop() {
-
-    }
 
     public IntakeState getState() {
         return currentState;
