@@ -22,7 +22,6 @@ public class TeleOperation extends LinearOpMode {
             intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-            // robot centric available
 
             if (gamepad1.a) {
                 intake.setState(Intake.IntakeState.INTAKE);
@@ -40,6 +39,9 @@ public class TeleOperation extends LinearOpMode {
             if (gamepad2.share) {
                 robot.hardware.imu.resetYaw();
             }
+
+            intake.update();
+            //pusher.update(robot.pollenShooter.isReady(), gamepad1.dpad_up);
 
             telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
                     .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
