@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.robot.SlewRateLimiter;
 
 //state machines are life.
 public class Intake {
-    private  final SlewRateLimiter intakeLimiter = new SlewRateLimiter(2.0);
+    private  final SlewRateLimiter intakeLimiter = new SlewRateLimiter(1.5);
 
     private DcMotorEx intakeMotor;
     private Servo intakeDrop;
