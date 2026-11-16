@@ -31,6 +31,8 @@ public class Intake {
         this.intakeMotor = intake;
         this.intakeDrop = intakeDrop;
         this.intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        currentState = IntakeState.UP;
+        intakeDrop.setPosition(intakeUpPosition);
     }
 
     public void setState (IntakeState state) {

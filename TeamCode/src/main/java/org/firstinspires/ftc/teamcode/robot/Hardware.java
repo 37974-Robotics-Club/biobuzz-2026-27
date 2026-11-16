@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.robot;
 
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -24,10 +25,12 @@ public class Hardware {
     public DcMotorEx pollenFlywheel;
     public Servo pollenHood;
     public CRServo pollenTurret;
+    public AnalogInput pollenTurretFeedback;
 
     public DcMotorEx nectarFlywheel;
     public Servo nectarHood;
     public CRServo nectarTurret;
+    public AnalogInput nectarTurretFeedback;
   
     public DcMotorEx pusher;
     public DcMotorEx intake;
@@ -46,10 +49,12 @@ public class Hardware {
         pollenFlywheel = hardwareMap.get(DcMotorEx.class, "pollenFlywheel");
         pollenHood = hardwareMap.get(Servo.class, "pollenHood");
         pollenTurret = hardwareMap.get(CRServo.class, "pollenTurret");
+        pollenTurretFeedback = hardwareMap.get(AnalogInput.class, "pollenTurretFeedback");
 
         nectarFlywheel = hardwareMap.get(DcMotorEx.class, "nectarFlywheel");
         nectarHood = hardwareMap.get(Servo.class, "nectarHood");
         nectarTurret = hardwareMap.get(CRServo.class, "nectarTurret");
+        nectarTurretFeedback = hardwareMap.get(AnalogInput.class, "nectarTurretFeedback");
 
         pusher = hardwareMap.get(DcMotorEx.class, "pusher");
         intake = hardwareMap.get(DcMotorEx.class, "intake");

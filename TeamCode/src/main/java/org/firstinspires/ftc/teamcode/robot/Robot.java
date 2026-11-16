@@ -39,13 +39,15 @@ public class Robot {
         pollenShooter = new Shooter(
                 hardware.pollenFlywheel,
                 hardware.pollenHood,
-                hardware.pollenTurret
+                hardware.pollenTurret,
+                hardware.pollenTurretFeedback
         );
 
         nectarShooter = new Shooter(
                 hardware.nectarFlywheel,
                 hardware.nectarHood,
-                hardware.nectarTurret
+                hardware.nectarTurret,
+                hardware.nectarTurretFeedback
         );
 
     }

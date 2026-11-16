@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -8,6 +9,8 @@ public class Shooter {
     private final DcMotorEx flywheel;
     private final Servo hood;
     private final CRServo turret;
+
+    private final AnalogInput turretFeedback;
 
     public enum FlywheelState {
         IDLE, SPINNING, READY
@@ -20,10 +23,11 @@ public class Shooter {
 
     private long hoodElapsedTime;
 
-    public Shooter(DcMotorEx flywheel, Servo hood, CRServo turret) {
+    public Shooter(DcMotorEx flywheel, Servo hood, CRServo turret, AnalogInput turretFeedback) {
         this.flywheel = flywheel;
         this.hood = hood;
         this.turret = turret;
+        this.turretFeedback = turretFeedback;
 
         if (this.flywheel != null) {
             this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);

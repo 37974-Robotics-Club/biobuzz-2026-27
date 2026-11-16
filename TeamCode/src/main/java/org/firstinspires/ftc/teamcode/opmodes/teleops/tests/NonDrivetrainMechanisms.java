@@ -14,17 +14,16 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap);
-        Pusher pusher = new Pusher(robot.hardware.pusher);
-        Shooter shooter = new Shooter(robot.hardware.pollenFlywheel,
-                robot.hardware.pollenHood,
-                robot.hardware.pollenTurret);
-        Intake intake = new Intake(robot.hardware.intake, robot.hardware.intakeDrop);
+
+        Intake intake = robot.intake;
+        Pusher pusher = robot.pusher;
+        Shooter pollenShooter = robot.pollenShooter;
         waitForStart();
 
         while (opModeIsActive()) {
 
-            pusher.update(shooter.isReady(), gamepad1.right_bumper);
-            shooter.setTargetVelocity(2000);
+            pusher.update(pollenShooter.isReady(), gamepad1.right_bumper);
+            pollenShooter.setTargetVelocity(2000);
 
             if (gamepad1.a) {
                 intake.setState(Intake.IntakeState.INTAKE);
@@ -42,7 +41,7 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
             telemetry.addLine();
             telemetry.addData("Intake State", intake.getState());
             telemetry.addData("Pusher State", pusher.getState());
-            telemetry.addData("Shooter State", shooter.getState());
+            telemetry.addData("Shooter State", pollenShooter.getState());
             telemetry.update();
 
         }
