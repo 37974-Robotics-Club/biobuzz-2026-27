@@ -1,35 +1,32 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.qualcomm.robotcore.util.ElapsedTime;
-
 public class SlewRateLimiter {
     private final double maxRate;
     private double lastValue = 0.0;
-    private final ElapsedTime timer = new ElapsedTime();
+    private long lastTime;
 
     public SlewRateLimiter(double maxRatePerSecond) {
         this.maxRate = maxRatePerSecond;
+        reset();
     }
 
     public void reset() {
         lastValue = 0.0;
-        timer.reset();
+        lastTime = System.nanoTime();
     }
 
     public double calculate(double targetValue) {
-        double elapsedTimeSeconds = timer.seconds();
-        timer.reset();
+        long currentTime = System.nanoTime();
+        double elapsedTime = (currentTime - lastTime) / 1e9;
+        lastTime = currentTime;
 
-        if (elapsedTimeSeconds > 0.2) {
-            elapsedTimeSeconds = 0.02;
-        }
+        elapsedTime = Math.min(elapsedTime, 0.05);
 
-        double maxChange = maxRate * elapsedTimeSeconds;
+        double maxChange = maxRate * elapsedTime;
         double error = targetValue - lastValue;
 
-        double step = Math.max(-maxChange, Math.min(maxChange, error));
+        lastValue += Math.max(-maxChange, Math.min(maxChange, error));
 
-        lastValue += step;
         return lastValue;
     }
 }
