@@ -21,50 +21,56 @@ public class TeleOperation extends LinearOpMode {
                 robot.hardware.pollenHood,
                 robot.hardware.pollenTurret);
 
+        boolean PSwasReady = false;
+
+        intake.setState(Intake.IntakeState.UP);
+
         waitForStart();
 
         while (opModeIsActive()) {
-            intake.update();
-            pusher.update(pollenShooter.isReady(), gamepad2.right_trigger_pressed);
 
 
             intake.setState(Intake.IntakeState.DOWN_IDLE);
 
+            //DRIVETRAIN
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+            if (gamepad1.shareWasPressed()) {
+                robot.hardware.imu.resetYaw();
+            }
 
-            if (gamepad1.right_trigger_pressed || gamepad1.right_bumper) {
+            //INTAKE
+            if (gamepad1.right_bumper) {
                 intake.setState(Intake.IntakeState.INTAKE);
-            } else if (gamepad1.left_trigger_pressed || gamepad1.left_bumper) {
+            } else if (gamepad1.left_bumper) {
                 intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
                 intake.setState(Intake.IntakeState.DOWN_IDLE);
             }
 
-            if (gamepad1.share) {
-                robot.hardware.imu.resetYaw();
+            //TEMPORARY PUSHER
+            if (gamepad2.squareWasPressed()) {
+                pusher.setState(Pusher.PusherState.FEEDING);
             }
 
-            if (gamepad2.square) {
-                pusher.setState(Pusher.PusherState.FEEDING);            }
-
+            //SHOOTER
             if (gamepad2.triangle) {
                 pollenShooter.setTargetVelocity(2000);
             } else {
                 pollenShooter.setTargetVelocity(0);
             }
+            boolean PSisReady = pollenShooter.isReady();
 
-            if (pollenShooter.isReady()) {
+            //RUMBLE
+            if (PSisReady && !PSwasReady) {
                 gamepad1.rumble(500);
             }
+            PSwasReady = PSisReady;
 
 
-            telemetry.addData("Heading", robot.hardware.imu.getRobotYawPitchRollAngles()
-                    .getYaw(org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES));
-            telemetry.addLine("gp1 - share to reset heading");
-            telemetry.addData("vel", pollenShooter.getCurrentVelocity());
-            telemetry.update();
+
+
+            intake.update();
+            pusher.update(PSisReady, gamepad2.right_trigger_pressed);
         }
-
-
         }
     }

@@ -34,9 +34,10 @@ public class Shooter {
     }
 
     public FlywheelState getState() {
-        double velocityError = Math.abs(targetVelocity - flywheel.getVelocity());
+        double currentVelocity = flywheel.getVelocity();
+        double velocityError = Math.abs(targetVelocity - currentVelocity);
 
-        if (flywheel.getVelocity() == 0 && targetVelocity == 0) {
+        if (currentVelocity == 0 && targetVelocity == 0) {
             setState(FlywheelState.IDLE);
             return state;
         }
@@ -68,8 +69,12 @@ public class Shooter {
     }
 
     public void setTargetVelocity(double velocity) {
-        this.targetVelocity = Math.max(0, velocity);
-        flywheel.setVelocity(this.targetVelocity);
+        double newTarget = Math.max(0, velocity);
+
+        if (newTarget == targetVelocity) return;
+
+        targetVelocity = newTarget;
+        flywheel.setVelocity(targetVelocity);
     }
 
     public void setHoodPosition(double position) {

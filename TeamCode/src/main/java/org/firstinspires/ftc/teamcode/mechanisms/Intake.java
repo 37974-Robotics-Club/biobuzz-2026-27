@@ -59,21 +59,21 @@ public class Intake {
             case OUTTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() == intakeDownPosition) {
-                    intakeTargetPower = -0.9;
+                    intakeTargetPower = -0.75;
                 }
                 break;
         }
     }
 
     public void update() {
-        double smoothedPower = intakeLimiter.calculate(intakeTargetPower);
-
         if (currentState == IntakeState.UP) {
-            smoothedPower = 0;
             intakeLimiter.reset();
-        } else {
-            intakeMotor.setPower(smoothedPower);
+            intakeMotor.setPower(0);
+            return;
         }
+
+        double smoothedPower = intakeLimiter.calculate(intakeTargetPower);
+        intakeMotor.setPower(smoothedPower);
     }
 
 

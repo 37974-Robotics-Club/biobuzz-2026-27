@@ -20,7 +20,9 @@ public class SlewRateLimiter {
         double elapsedTimeSeconds = timer.seconds();
         timer.reset();
 
-        if (elapsedTimeSeconds > 0.2) elapsedTimeSeconds = 0.02;
+        if (elapsedTimeSeconds > 0.2) {
+            elapsedTimeSeconds = 0.02;
+        }
 
         double maxChange = maxRate * elapsedTimeSeconds;
         double error = targetValue - lastValue;
