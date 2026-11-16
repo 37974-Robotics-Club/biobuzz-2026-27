@@ -52,7 +52,7 @@ public class Intake {
             case INTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() == intakeDownPosition) {
-                    intakeTargetPower = 0.9;
+                    intakeTargetPower = 0.75;
                 }
                 break;
 
