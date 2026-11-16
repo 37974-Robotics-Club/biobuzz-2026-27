@@ -27,7 +27,6 @@ public class TeleOperation extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-
             intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             //DRIVETRAIN
@@ -57,6 +56,8 @@ public class TeleOperation extends LinearOpMode {
                 pollenShooter.setTargetVelocity(0);
             }
             boolean PSisReady = pollenShooter.isReady();
+
+            pollenShooter.setTurretPower(gamepad2.left_stick_x);
 
             //RUMBLE
             if (PSisReady && !PSwasReady) {

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.robot.Config;
 import org.firstinspires.ftc.teamcode.robot.SlewRateLimiter;
 
 public class Drivetrain {
@@ -32,7 +33,7 @@ public class Drivetrain {
         double smoothedStrafe = strafeLimiter.calculate(rawStrafe);
         double smoothedTurn = turnLimiter.calculate(rawTurn);
 
-        smoothedStrafe *= 1.1;
+        smoothedStrafe *= Config.STRAFE_COMPENSATION;
 
         double denominator = Math.max(Math.abs(smoothedDrive) + Math.abs(smoothedStrafe) + Math.abs(smoothedTurn), 1.0);
         double speedLimit = 0.9;
