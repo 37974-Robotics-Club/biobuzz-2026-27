@@ -22,11 +22,8 @@ public class Hardware {
     public DcMotorEx backLeft;
   
     public DcMotorEx pollenFlywheel;
-    public DcMotorEx nectarFlywheel;
     public Servo pollenHood;
-    public Servo nectarHood;
     public CRServo pollenTurret;
-    public CRServo nectarTurret;
   
     public DcMotorEx pusher;
     public DcMotorEx intake;
@@ -42,11 +39,8 @@ public class Hardware {
         backRight = hardwareMap.get(DcMotorEx.class, "backRight");
         backLeft = hardwareMap.get(DcMotorEx.class, "backLeft");
         pollenFlywheel = hardwareMap.get(DcMotorEx.class, "pollenFlywheel");
-        nectarFlywheel = hardwareMap.get(DcMotorEx.class, "nectarFlywheel");
         pollenHood = hardwareMap.get(Servo.class, "pollenHood");
-        nectarHood = hardwareMap.get(Servo.class, "nectarHood");
         pollenTurret = hardwareMap.get(CRServo.class, "pollenTurret");
-        nectarTurret = hardwareMap.get(CRServo.class, "nectarTurret");
         pusher = hardwareMap.get(DcMotorEx.class, "pusher");
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         intakeDrop = hardwareMap.get(Servo.class, "intakeDrop");
@@ -57,9 +51,7 @@ public class Hardware {
         frontRight.setDirection(DcMotorSimple.Direction.FORWARD);
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
         pollenFlywheel.setDirection(DcMotorSimple.Direction.FORWARD);
-        nectarFlywheel.setDirection(DcMotorSimple.Direction.FORWARD);
         pollenTurret.setDirection(CRServo.Direction.FORWARD);
-        nectarTurret.setDirection(CRServo.Direction.FORWARD);
         pusher.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -69,7 +61,6 @@ public class Hardware {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         pollenFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        nectarFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         pusher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -78,7 +69,6 @@ public class Hardware {
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pollenFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        nectarFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 

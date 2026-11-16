@@ -14,12 +14,10 @@ public class TeleOperation extends LinearOpMode {
     @Override
     public void runOpMode() {
         Robot robot = new Robot(hardwareMap);
-        Intake intake = new Intake(robot.hardware.intake, robot.hardware.intakeDrop);
-        Pusher pusher = new Pusher(robot.hardware.pusher);
-        Shooter pollenShooter = new Shooter(
-                robot.hardware.pollenFlywheel,
-                robot.hardware.pollenHood,
-                robot.hardware.pollenTurret);
+
+        Intake intake = robot.intake;
+        Pusher pusher = robot.pusher;
+        Shooter pollenShooter = robot.pollenShooter;
 
         boolean PSwasReady = false;
 
@@ -65,9 +63,6 @@ public class TeleOperation extends LinearOpMode {
                 gamepad1.rumble(500);
             }
             PSwasReady = PSisReady;
-
-
-
 
             intake.update();
             pusher.update(PSisReady, gamepad2.right_trigger_pressed);
