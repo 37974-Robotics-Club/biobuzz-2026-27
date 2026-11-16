@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.mechanisms.Shooter;
 
-@TeleOp
+@TeleOp(group = "tests")
 public class servoTest extends LinearOpMode {
 
     @Override

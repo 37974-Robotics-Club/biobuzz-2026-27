@@ -8,7 +8,7 @@ import org.firstinspires.ftc.teamcode.mechanisms.Pusher;
 import org.firstinspires.ftc.teamcode.mechanisms.Shooter;
 import org.firstinspires.ftc.teamcode.robot.Robot;
 
-@TeleOp
+@TeleOp(group = "tests")
 public class NonDrivetrainMechanisms extends LinearOpMode {
 
     @Override
@@ -22,7 +22,7 @@ public class NonDrivetrainMechanisms extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            pusher.update(pollenShooter.isReady(), gamepad1.right_bumper);
+            pusher.update(pollenShooter.isReady(), gamepad1.right_bumper, gamepad1.left_bumper);
             pollenShooter.setTargetVelocity(2000);
 
             if (gamepad1.a) {

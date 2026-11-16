@@ -36,9 +36,9 @@ public class TeleOperation extends LinearOpMode {
             }
 
             //INTAKE
-            if (gamepad1.right_bumper) {
+            if (gamepad1.right_bumper || gamepad2.right_trigger_pressed) {
                 intake.setState(Intake.IntakeState.INTAKE);
-            } else if (gamepad1.left_bumper) {
+            } else if (gamepad1.left_bumper || gamepad2.left_trigger_pressed) {
                 intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
                 intake.setState(Intake.IntakeState.DOWN_IDLE);
@@ -58,15 +58,23 @@ public class TeleOperation extends LinearOpMode {
             boolean PSisReady = pollenShooter.isReady();
 
             pollenShooter.setTurretPower(gamepad2.left_stick_x);
+            //HOOD
+            if (-gamepad2.left_stick_y > -0.2) {
+                pollenShooter.hoodUp();
+            } else if (-gamepad2.left_stick_y < 0.2) {
+                pollenShooter.hoodDown();
+            }
+            //TURRET
+            pollenShooter.setTurretPower(gamepad2.left_stick_x);
 
             //RUMBLE
             if (PSisReady && !PSwasReady) {
-                gamepad1.rumble(500);
+                gamepad2.rumble(500);
             }
             PSwasReady = PSisReady;
 
             intake.update();
-            pusher.update(PSisReady, gamepad2.right_trigger_pressed);
+            pusher.update(PSisReady, gamepad2.right_bumper, gamepad2.left_bumper);
         }
         }
     }

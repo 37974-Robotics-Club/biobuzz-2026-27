@@ -12,6 +12,9 @@ public class Shooter {
 
     private final AnalogInput turretFeedback;
 
+    private static final double HOOD_INCREMENT = 0.1;
+    private static final long HOOD_INTERVAL_MS = 75;
+
     public enum FlywheelState {
         IDLE, SPINNING, READY
     }
@@ -89,15 +92,15 @@ public class Shooter {
     }
 
     public void hoodUp() {
-        if (System.currentTimeMillis() - hoodElapsedTime > 75) {
-            setHoodPosition(targetHoodPosition + 0.1);
+        if (System.currentTimeMillis() - hoodElapsedTime > HOOD_INTERVAL_MS) {
+            setHoodPosition(targetHoodPosition + HOOD_INCREMENT);
             hoodElapsedTime = System.currentTimeMillis();
         }
     }
 
     public void hoodDown() {
-        if (System.currentTimeMillis() - hoodElapsedTime > 75) {
-            setHoodPosition(targetHoodPosition - 0.1);
+        if (System.currentTimeMillis() - hoodElapsedTime > HOOD_INTERVAL_MS) {
+            setHoodPosition(targetHoodPosition - HOOD_INCREMENT);
             hoodElapsedTime = System.currentTimeMillis();
         }
     }

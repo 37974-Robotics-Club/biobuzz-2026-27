@@ -21,10 +21,13 @@ public class Pusher {
         this.pusherMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
     }
 
-    public void update(boolean shooterReady, boolean driverClearance) {
+    public void update(boolean shooterReady, boolean driverClearance, boolean pusherDown) {
         if (shooterReady && driverClearance) {
             setState(PusherState.FEEDING);
-        } else {
+        } else if (pusherDown) {
+            setState(PusherState.REVERSE);
+        }
+        else {
             setState(PusherState.IDLE);
         }
     }
