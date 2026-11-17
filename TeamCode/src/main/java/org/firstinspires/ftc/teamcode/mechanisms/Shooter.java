@@ -12,7 +12,7 @@ public class Shooter {
 
     private final AnalogInput turretFeedback;
 
-    private static final double HOOD_INCREMENT = 0.1;
+    private static final double HOOD_INCREMENT = 0.05;
     private static final long HOOD_INTERVAL_MS = 75;
 
     public enum FlywheelState {

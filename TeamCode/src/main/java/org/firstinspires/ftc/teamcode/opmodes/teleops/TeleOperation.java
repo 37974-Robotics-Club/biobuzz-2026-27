@@ -21,6 +21,9 @@ public class TeleOperation extends LinearOpMode {
 
         boolean PSwasReady = false;
 
+        double shooterRPM = Math.abs(pollenShooter.getCurrentVelocity()) * 60 / 28;
+
+
         intake.setState(Intake.IntakeState.UP);
 
         waitForStart();
@@ -51,7 +54,7 @@ public class TeleOperation extends LinearOpMode {
 
             //SHOOTER
             if (gamepad2.x) {
-                pollenShooter.setTargetVelocity(99999999);
+                pollenShooter.setTargetVelocity(2400);
             } else {
                 pollenShooter.setTargetVelocity(0);
             }
@@ -78,6 +81,7 @@ public class TeleOperation extends LinearOpMode {
 
             telemetry.addData("Hood Position", pollenShooter.getHoodPosition());
             telemetry.addData("Vel", pollenShooter.getCurrentVelocity());
+            telemetry.addData("RPM", shooterRPM);
             telemetry.update();
         }
         }
