@@ -8,13 +8,12 @@ import org.firstinspires.ftc.teamcode.robot.SlewRateLimiter;
 
 //state machines are life.
 public class Intake {
-    private  final SlewRateLimiter intakeLimiter = new SlewRateLimiter(1.5);
 
     private DcMotorEx intakeMotor;
     private Servo intakeDrop;
 
-    public double intakeDownPosition = 0;
-    public double intakeUpPosition = 1;
+    public double intakeDownPosition = 1;
+    public double intakeUpPosition = 0;
 
     public double intakeTargetPower = 0;
 
@@ -54,7 +53,7 @@ public class Intake {
             case INTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() == intakeDownPosition) {
-                    intakeTargetPower = 0.75;
+                    intakeTargetPower = 0.7;
                 }
                 break;
 
@@ -69,13 +68,11 @@ public class Intake {
 
     public void update() {
         if (currentState == IntakeState.UP) {
-            intakeLimiter.reset();
             intakeMotor.setPower(0);
             return;
         }
 
-        double smoothedPower = intakeLimiter.calculate(intakeTargetPower);
-        intakeMotor.setPower(smoothedPower);
+        intakeMotor.setPower(intakeTargetPower);
     }
 
 

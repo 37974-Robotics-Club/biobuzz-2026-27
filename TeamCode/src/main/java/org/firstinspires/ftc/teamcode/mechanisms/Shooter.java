@@ -36,7 +36,7 @@ public class Shooter {
             this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         }
         if (this.hood != null) {
-            this.setHoodPosition(targetHoodPosition);
+            //this.setHoodPosition(targetHoodPosition);
         }
     }
 
@@ -85,7 +85,7 @@ public class Shooter {
     }
 
     public void setHoodPosition(double position) {
-        targetHoodPosition = Math.max(0.0, Math.min(1.0, position));
+        targetHoodPosition = Math.max(0.25, Math.min(0.97, position));
         if (hood != null) {
             hood.setPosition(targetHoodPosition);
         }
@@ -110,5 +110,9 @@ public class Shooter {
             turret.setPower(turretPower);
 
         }
+    }
+
+    public double getHoodPosition() {
+        return hood.getPosition();
     }
 }

@@ -45,13 +45,13 @@ public class TeleOperation extends LinearOpMode {
             }
 
             //TEMPORARY PUSHER
-            if (gamepad2.squareWasPressed()) {
+            if (gamepad2.triangle) {
                 pusher.setState(Pusher.PusherState.FEEDING);
             }
 
             //SHOOTER
-            if (gamepad2.triangle) {
-                pollenShooter.setTargetVelocity(2000);
+            if (gamepad2.x) {
+                pollenShooter.setTargetVelocity(99999999);
             } else {
                 pollenShooter.setTargetVelocity(0);
             }
@@ -59,10 +59,10 @@ public class TeleOperation extends LinearOpMode {
 
             pollenShooter.setTurretPower(gamepad2.left_stick_x);
             //HOOD
-            if (-gamepad2.left_stick_y > -0.2) {
-                pollenShooter.hoodUp();
-            } else if (-gamepad2.left_stick_y < 0.2) {
+            if (-gamepad2.left_stick_y < -0.2) {
                 pollenShooter.hoodDown();
+            } else if (-gamepad2.left_stick_y > 0.2) {
+                pollenShooter.hoodUp();
             }
             //TURRET
             pollenShooter.setTurretPower(gamepad2.left_stick_x);
@@ -75,6 +75,10 @@ public class TeleOperation extends LinearOpMode {
 
             intake.update();
             pusher.update(PSisReady, gamepad2.right_bumper, gamepad2.left_bumper);
+
+            telemetry.addData("Hood Position", pollenShooter.getHoodPosition());
+            telemetry.addData("Vel", pollenShooter.getCurrentVelocity());
+            telemetry.update();
         }
         }
     }
