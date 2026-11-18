@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.robot;
 
-import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.mechanisms.Drivetrain;
@@ -19,24 +18,22 @@ public class Robot {
     public final Shooter nectarShooter;
     public final Pusher pusher;
     public final Intake intake;
-    public final GoBildaPinpointDriver pinpoint;
 
     public Robot(HardwareMap hardwareMap) {
 
         hardware = new Hardware();
         hardware.init(hardwareMap);
-        pinpoint = hardware.pinpoint;
 
         drivetrain = new Drivetrain(
                 hardware.frontLeft,
                 hardware.frontRight,
                 hardware.backLeft,
                 hardware.backRight,
-                hardware.imu,
-                hardware.pinpoint
+                hardware.imu
         );
 
         pusher = new Pusher(hardware.pusher);
+      
         intake = new Intake(hardware.intake, hardware.intakeDrop);
       
         pollenShooter = new Shooter(
