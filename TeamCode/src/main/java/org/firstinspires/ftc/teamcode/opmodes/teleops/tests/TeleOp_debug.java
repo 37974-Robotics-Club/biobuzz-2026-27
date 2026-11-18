@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.opmodes.teleops.tests;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.mechanisms.Intake;
 import org.firstinspires.ftc.teamcode.mechanisms.Pusher;
 import org.firstinspires.ftc.teamcode.mechanisms.Shooter;
@@ -30,12 +32,14 @@ public class TeleOp_debug extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            robot.drivetrain.update();
+
             intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             //DRIVETRAIN
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-            if (gamepad1.shareWasPressed()) {
-                robot.hardware.imu.resetYaw();
+            if (gamepad1.share) {
+                robot.drivetrain.resetHeading();
             }
 
             //INTAKE
@@ -60,7 +64,6 @@ public class TeleOp_debug extends LinearOpMode {
             }
             boolean PSisReady = pollenShooter.isReady();
 
-            pollenShooter.setTurretPower(gamepad2.left_stick_x);
             //HOOD
             if (-gamepad2.left_stick_y < -0.2) {
                 pollenShooter.hoodDown();
@@ -72,16 +75,27 @@ public class TeleOp_debug extends LinearOpMode {
 
             //RUMBLE
             if (PSisReady && !PSwasReady) {
-                gamepad2.rumble(500);
+                gamepad2.rumble(300);
             }
             PSwasReady = PSisReady;
 
             intake.update();
             pusher.update(PSisReady, gamepad2.right_bumper, gamepad2.left_bumper);
 
+            if (robot.pinpoint != null) {
+                telemetry.addData("Pinpoint X (in)", "%.2f", robot.pinpoint.getPosX(DistanceUnit.INCH));
+                telemetry.addData("Pinpoint Y (in)", "%.2f", robot.pinpoint.getPosY(DistanceUnit.INCH));
+                telemetry.addData("Pinpoint Heading (°)", "%.2f", robot.pinpoint.getHeading(AngleUnit.DEGREES));
+            }
             telemetry.addData("Hood Position", pollenShooter.getHoodPosition());
-            telemetry.addData("Vel", pollenShooter.getCurrentVelocity());
-            telemetry.addData("RPM", shooterRPM);
+            telemetry.addLine();
+            telemetry.addData("Cur Vel", pollenShooter.getCurrentVelocity());
+            telemetry.addData("Cur RPM", shooterRPM);
+            telemetry.addLine();
+            telemetry.addData("Tgt Vel", pollenShooter.getTargetVelocity());
+            telemetry.addLine();
+            telemetry.addData("Turret Stick Power", gamepad2.left_stick_x);
+            telemetry.addData("Turret Voltage", pollenShooter.getCurrentTurretVoltage());
             telemetry.update();
         }
     }

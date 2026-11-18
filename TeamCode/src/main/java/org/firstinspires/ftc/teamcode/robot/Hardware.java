@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.robot;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.AnalogInput;
@@ -10,6 +11,8 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 public class Hardware {
 
@@ -37,6 +40,7 @@ public class Hardware {
     public Servo intakeDrop;
   
     public IMU imu;
+    public GoBildaPinpointDriver pinpoint;
 
   
     public void init(HardwareMap hardwareMap) {
@@ -50,15 +54,23 @@ public class Hardware {
         pollenHood = hardwareMap.get(Servo.class, "pollenHood");
         pollenTurret = hardwareMap.get(CRServo.class, "pollenTurret");
         pollenTurretFeedback = hardwareMap.get(AnalogInput.class, "pollenTurretFeedback");
-
+/*
         nectarFlywheel = hardwareMap.get(DcMotorEx.class, "nectarFlywheel");
         nectarHood = hardwareMap.get(Servo.class, "nectarHood");
         nectarTurret = hardwareMap.get(CRServo.class, "nectarTurret");
         nectarTurretFeedback = hardwareMap.get(AnalogInput.class, "nectarTurretFeedback");
 
+ */
         pusher = hardwareMap.get(DcMotorEx.class, "pusher");
         intake = hardwareMap.get(DcMotorEx.class, "intake");
         intakeDrop = hardwareMap.get(Servo.class, "intakeDrop");
+
+        pinpoint = hardwareMap.get(GoBildaPinpointDriver.class, "pinpoint");
+        pinpoint.setOffsets(-0.2212331426425243, 0.4783905209518793, DistanceUnit.INCH);
+        pinpoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+        pinpoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        pinpoint.resetPosAndIMU();
+
 
 
         frontLeft.setDirection(DcMotorSimple.Direction.REVERSE);
@@ -67,7 +79,8 @@ public class Hardware {
         backRight.setDirection(DcMotorSimple.Direction.FORWARD);
         pollenFlywheel.setDirection(DcMotorSimple.Direction.FORWARD);
         pollenTurret.setDirection(CRServo.Direction.FORWARD);
-        nectarTurret.setDirection(CRServo.Direction.FORWARD);
+        //nectarFlywheel.setDirection(DcMotorSimple.Direction.FORWARD);
+        //nectarTurret.setDirection(CRServo.Direction.FORWARD);
         pusher.setDirection(DcMotorSimple.Direction.FORWARD);
         intake.setDirection(DcMotorSimple.Direction.FORWARD);
 
@@ -77,16 +90,16 @@ public class Hardware {
         backRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         backLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         pollenFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        nectarFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        //nectarFlywheel.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         pusher.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pollenFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        nectarFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //nectarFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         pusher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         intake.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -99,6 +112,7 @@ public class Hardware {
                 )
         );
         imu.initialize(parameters);
+
 
     }
 }

@@ -30,12 +30,14 @@ public class TeleOperation extends LinearOpMode {
 
         while (opModeIsActive()) {
 
+            robot.drivetrain.update();
+
             intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             //DRIVETRAIN
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-            if (gamepad1.shareWasPressed()) {
-                robot.hardware.imu.resetYaw();
+            if (gamepad1.share) {
+                robot.drivetrain.resetHeading();
             }
 
             //INTAKE
@@ -45,11 +47,6 @@ public class TeleOperation extends LinearOpMode {
                 intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
                 intake.setState(Intake.IntakeState.DOWN_IDLE);
-            }
-
-            //TEMPORARY PUSHER
-            if (gamepad2.triangle) {
-                pusher.setState(Pusher.PusherState.FEEDING);
             }
 
             //SHOOTER
@@ -78,11 +75,6 @@ public class TeleOperation extends LinearOpMode {
 
             intake.update();
             pusher.update(PSisReady, gamepad2.right_bumper, gamepad2.left_bumper);
-
-            telemetry.addData("Hood Position", pollenShooter.getHoodPosition());
-            telemetry.addData("Vel", pollenShooter.getCurrentVelocity());
-            telemetry.addData("RPM", shooterRPM);
-            telemetry.update();
-        }
         }
     }
+}

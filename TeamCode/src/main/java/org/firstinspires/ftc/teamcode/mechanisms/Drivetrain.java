@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import com.qualcomm.hardware.gobilda.GoBildaPinpointDriver;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.Pose2D;
 import org.firstinspires.ftc.teamcode.robot.Config;
 import org.firstinspires.ftc.teamcode.robot.SlewRateLimiter;
 
@@ -18,13 +21,43 @@ public class Drivetrain {
     private final DcMotorEx backLeft;
     private final DcMotorEx backRight;
     private final IMU imu;
+    private final GoBildaPinpointDriver pinpoint;
 
-    public Drivetrain(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, IMU imu) {
+    public Drivetrain(DcMotorEx frontLeft, DcMotorEx frontRight, DcMotorEx backLeft, DcMotorEx backRight, IMU imu, GoBildaPinpointDriver pinpoint) {
         this.frontLeft = frontLeft;
         this.frontRight = frontRight;
         this.backLeft = backLeft;
         this.backRight = backRight;
         this.imu = imu;
+        this.pinpoint = pinpoint;
+    }
+
+    public void update() {
+        if (pinpoint != null) {
+            pinpoint.update();
+        }
+    }
+
+    public void resetHeading() {
+        if (pinpoint != null) {
+            pinpoint.setPosition(new Pose2D(DistanceUnit.INCH, 0, 0, AngleUnit.DEGREES, 0));
+        }
+        if (imu != null) {
+            imu.resetYaw();
+        }
+    }
+
+    public double getHeading(AngleUnit unit) {
+        if (pinpoint != null) {
+            return pinpoint.getHeading(unit);
+        } else if (imu != null) {
+            return imu.getRobotYawPitchRollAngles().getYaw(unit);
+        }
+        return 0;
+    }
+
+    public GoBildaPinpointDriver getPinpoint() {
+        return pinpoint;
     }
 
     public void robotCentricDrive(double rawStrafe, double rawDrive, double rawTurn) {
@@ -51,7 +84,7 @@ public class Drivetrain {
 
     public void fieldCentricDrive(double strafe, double forward, double rotation) {
 
-        double heading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+        double heading = getHeading(AngleUnit.DEGREES);
         double rotatedX = strafe * Math.cos(-heading) - forward * Math.sin(-heading);
         double rotatedY = strafe * Math.sin(-heading) + forward * Math.cos(-heading);
 
