@@ -18,18 +18,7 @@ public class Pusher {
 
     public Pusher(DcMotorEx pusher) {
         this.pusherMotor = pusher;
-        this.pusherMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void update(boolean shooterReady, boolean driverClearance, boolean pusherDown) {
-        if (shooterReady && driverClearance) {
-            setState(PusherState.FEEDING);
-        } else if (pusherDown) {
-            setState(PusherState.REVERSE);
-        }
-        else {
-            setState(PusherState.IDLE);
-        }
+        this.pusherMotor.setMode(DcMotorEx.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public boolean isFeeding() {

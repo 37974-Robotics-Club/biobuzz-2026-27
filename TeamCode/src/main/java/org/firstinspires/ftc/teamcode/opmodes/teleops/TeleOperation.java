@@ -72,7 +72,6 @@ public class TeleOperation extends LinearOpMode {
             PSwasReady = PSisReady;
 
             intake.update();
-            pusher.update(PSisReady, gamepad2.right_bumper, gamepad2.left_bumper);
         }
     }
 }

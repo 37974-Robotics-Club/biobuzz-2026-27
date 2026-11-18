@@ -47,11 +47,6 @@ public class TeleOp_debug extends LinearOpMode {
                 intake.setState(Intake.IntakeState.DOWN_IDLE);
             }
 
-            //TEMPORARY PUSHER
-            if (gamepad2.triangle) {
-                pusher.setState(Pusher.PusherState.FEEDING);
-            }
-
             //SHOOTER
             if (gamepad2.cross) {
                 pollenShooter.setTargetVelocity(2400);
@@ -59,6 +54,15 @@ public class TeleOp_debug extends LinearOpMode {
                 pollenShooter.setTargetVelocity(0);
             }
             boolean PSisReady = pollenShooter.isReady();
+
+            //TEMPORARY PUSHER
+            if (gamepad2.triangle && PSisReady) {
+                pusher.setState(Pusher.PusherState.FEEDING);
+            } else if (gamepad2.circle) {
+                pusher.setState(Pusher.PusherState.REVERSE);
+            } else {
+                pusher.setState(Pusher.PusherState.IDLE);
+            }
 
             pollenShooter.setTurretPower(gamepad2.left_stick_x);
             //HOOD
@@ -77,11 +81,18 @@ public class TeleOp_debug extends LinearOpMode {
             PSwasReady = PSisReady;
 
             intake.update();
-            pusher.update(PSisReady, gamepad2.right_bumper, gamepad2.left_bumper);
 
             telemetry.addData("Hood Position", pollenShooter.getHoodPosition());
             telemetry.addData("Vel", pollenShooter.getCurrentVelocity());
             telemetry.addData("RPM", shooterRPM);
+            telemetry.addLine();
+            telemetry.addData("Intake", "P1 right bumper, P2 right trigger");
+            telemetry.addData("Outtake", "P1 left bumper, P2 left trigger");
+            telemetry.addData("Run shooter", "P2 Cross");
+            telemetry.addData("Pusher Up", "P2 triangle + shooter at target speed");
+            telemetry.addData("Pusher Down", "P2 circle");
+            telemetry.addData("Turret (in theory)", "P2 left stick x");
+            telemetry.addData("Hood", "P2 left stick y");
             telemetry.update();
         }
     }
