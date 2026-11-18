@@ -30,14 +30,12 @@ public class TeleOperation extends LinearOpMode {
 
         while (opModeIsActive()) {
 
-            robot.drivetrain.update();
-
             intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             //DRIVETRAIN
             robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
-            if (gamepad1.share) {
-                robot.drivetrain.resetHeading();
+            if (gamepad1.shareWasPressed()) {
+                robot.hardware.imu.resetYaw();
             }
 
             //INTAKE
