@@ -118,7 +118,9 @@ public class Shooter {
     }
 
     public void setTurretPower(double turretPower) {
-        turret.setPower(turretPower);
+        if (turret != null) {
+            turret.setPower(turretPower);
+        }
     }
 
     public double getHoodPosition() {
