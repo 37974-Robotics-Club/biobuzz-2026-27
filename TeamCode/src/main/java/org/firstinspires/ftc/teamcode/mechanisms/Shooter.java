@@ -15,6 +15,9 @@ public class Shooter {
     private static final double HOOD_INCREMENT = 0.05;
     private static final long HOOD_INTERVAL_MS = 75;
 
+    private static final double TURRET_MAX_VOLTAGE = 3.3;
+    private static final double TURRET_MIN_VOLTAGE = 0.0;
+
     public enum FlywheelState {
         IDLE, SPINNING, READY
     }
@@ -118,9 +121,26 @@ public class Shooter {
     }
 
     public void setTurretPower(double turretPower) {
-        if (turret != null) {
-            turret.setPower(turretPower);
+        if (turret == null) return;
+        if (turretFeedback != null) {
+            double currentVoltage = turretFeedback.getVoltage();
+            if (currentVoltage <= TURRET_MIN_VOLTAGE && turretPower < 0) {
+                turret.setPower(0.0);
+                return;
+            }
+            if (currentVoltage >= TURRET_MAX_VOLTAGE && turretPower > 0) {
+                turret.setPower(0.0);
+                return;
+            }
         }
+        turret.setPower(turretPower);
+    }
+
+    public double getTurretVoltage() {
+        if (turretFeedback != null) {
+            return turretFeedback.getVoltage();
+        }
+        return 0.0;
     }
 
     public double getHoodPosition() {
