@@ -51,14 +51,14 @@ public class Intake {
             case INTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() == intakeDownPosition) {
-                    intakeTargetPower = 0.7;
+                    intakeTargetPower = 0.8;
                 }
                 break;
 
             case OUTTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
                 if (intakeDrop.getPosition() == intakeDownPosition) {
-                    intakeTargetPower = -0.75;
+                    intakeTargetPower = -0.8;
                 }
                 break;
         }
