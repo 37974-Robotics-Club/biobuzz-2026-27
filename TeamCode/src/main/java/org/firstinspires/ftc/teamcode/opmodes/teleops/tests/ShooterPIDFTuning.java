@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 @Configurable
 @TeleOp(group = "tests")
-public class ShooterPIDFTest extends OpMode {
+public class ShooterPIDFTuning extends OpMode {
 
     /**
      * Adapted from FTControl docs
