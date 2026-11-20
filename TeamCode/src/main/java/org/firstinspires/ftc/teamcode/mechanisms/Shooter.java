@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.mechanisms;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Shooter {
@@ -22,11 +23,20 @@ public class Shooter {
     private FlywheelState state = FlywheelState.IDLE;
 
     private double targetHoodPosition = 0;
+
     private double targetVelocity = 0;
+    public static double kP = 0.0;
+    public static double kI = 0.0;
+    public static double kD = 0.0;
+    public static double kF = 0.0;
 
     private long hoodElapsedTime;
 
     public Shooter(DcMotorEx flywheel, Servo hood, CRServo turret, AnalogInput turretFeedback) {
+        this(flywheel, hood, turret, turretFeedback, kP, kI, kD, kF);
+    }
+
+    public Shooter(DcMotorEx flywheel, Servo hood, CRServo turret, AnalogInput turretFeedback, double kP, double kI, double kD, double kF) {
         this.flywheel = flywheel;
         this.hood = hood;
         this.turret = turret;
@@ -34,9 +44,19 @@ public class Shooter {
 
         if (this.flywheel != null) {
             this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+            setPIDFCoefficients(kP, kI, kD, kF);
         }
         if (this.hood != null) {
-            //this.setHoodPosition(targetHoodPosition);
+            this.setHoodPosition(targetHoodPosition);
+        }
+    }
+
+    public void setPIDFCoefficients(double kP, double kI, double kD, double kF) {
+        if (this.flywheel != null) {
+            this.flywheel.setPIDFCoefficients(
+                    DcMotorEx.RunMode.RUN_USING_ENCODER,
+                    new PIDFCoefficients(kP, kI, kD, kF)
+            );
         }
     }
 
