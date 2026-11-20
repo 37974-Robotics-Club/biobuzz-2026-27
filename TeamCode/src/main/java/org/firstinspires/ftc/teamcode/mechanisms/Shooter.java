@@ -7,11 +7,10 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
 
 public class Shooter {
-    private final DcMotorEx flywheel;
-    private final Servo hood;
-    private final CRServo turret;
-
-    private final AnalogInput turretFeedback;
+    private DcMotorEx flywheel;
+    private Servo hood;
+    private CRServo turret;
+    private AnalogInput turretFeedback;
 
     private static final double HOOD_INCREMENT = 0.05;
     private static final long HOOD_INTERVAL_MS = 75;
@@ -36,28 +35,23 @@ public class Shooter {
         this(flywheel, hood, turret, turretFeedback, kP, kI, kD, kF);
     }
 
-    public Shooter(DcMotorEx flywheel, Servo hood, CRServo turret, AnalogInput turretFeedback, double kP, double kI, double kD, double kF) {
+    public Shooter(DcMotorEx flywheel, Servo hood, CRServo turret, AnalogInput turretFeedback,
+                   double kP, double kI, double kD, double kF) {
         this.flywheel = flywheel;
         this.hood = hood;
         this.turret = turret;
         this.turretFeedback = turretFeedback;
 
-        if (this.flywheel != null) {
-            this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-            setPIDFCoefficients(kP, kI, kD, kF);
-        }
-        if (this.hood != null) {
-            this.setHoodPosition(targetHoodPosition);
-        }
+        this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        setPIDFCoefficients(kP, kI, kD, kF);
+        this.setHoodPosition(targetHoodPosition);
     }
 
     public void setPIDFCoefficients(double kP, double kI, double kD, double kF) {
-        if (this.flywheel != null) {
-            this.flywheel.setPIDFCoefficients(
-                    DcMotorEx.RunMode.RUN_USING_ENCODER,
-                    new PIDFCoefficients(kP, kI, kD, kF)
-            );
-        }
+        this.flywheel.setPIDFCoefficients(
+                DcMotorEx.RunMode.RUN_USING_ENCODER,
+                new PIDFCoefficients(kP, kI, kD, kF)
+        );
     }
 
     public FlywheelState getState() {
@@ -106,9 +100,7 @@ public class Shooter {
 
     public void setHoodPosition(double position) {
         targetHoodPosition = Math.max(0.25, Math.min(0.97, position));
-        if (hood != null) {
-            hood.setPosition(targetHoodPosition);
-        }
+        hood.setPosition(targetHoodPosition);
     }
 
     public void hoodUp() {
@@ -126,10 +118,7 @@ public class Shooter {
     }
 
     public void setTurretPower(double turretPower) {
-        if (turret != null) {
-            turret.setPower(turretPower);
-
-        }
+        turret.setPower(turretPower);
     }
 
     public double getHoodPosition() {
