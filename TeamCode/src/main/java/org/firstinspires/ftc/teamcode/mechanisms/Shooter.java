@@ -46,7 +46,9 @@ public class Shooter {
         this.turretFeedback = turretFeedback;
 
         this.flywheel.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        setPIDFCoefficients(kP, kI, kD, kF);
+        if (kP != 0 || kI != 0 || kD != 0 || kF != 0) {
+            setPIDFCoefficients(kP, kI, kD, kF);
+        }
         this.setHoodPosition(targetHoodPosition);
     }
 
