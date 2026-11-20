@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.robot.controllers.SlewRateLimiter;
 
 public class Drivetrain {
 
-    private final SlewRateLimiter driveLimiter = new SlewRateLimiter(4.0);
-    private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(4.0);
-    private final SlewRateLimiter turnLimiter = new SlewRateLimiter(4.0);
+    private final SlewRateLimiter driveLimiter = new SlewRateLimiter(8.0);
+    private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(8.0);
+    private final SlewRateLimiter turnLimiter = new SlewRateLimiter(8.0);
 
     private final DcMotorEx frontLeft;
     private final DcMotorEx frontRight;
