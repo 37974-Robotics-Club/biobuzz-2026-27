@@ -21,8 +21,6 @@ public class TeleOp_debug extends LinearOpMode {
 
         boolean PSwasReady = false;
 
-
-
         intake.setState(Intake.IntakeState.UP);
 
         waitForStart();
@@ -47,9 +45,13 @@ public class TeleOp_debug extends LinearOpMode {
             if (gamepad1.dpad_right) dpadStrafe += 1.0;
             if (gamepad1.dpad_left) dpadStrafe -= 1.0;
             if (dpadDrive != 0 || dpadStrafe != 0) {
-                robot.drivetrain.robotCentricDrive(dpadStrafe * slowModeMultiplier, dpadDrive * slowModeMultiplier, gamepad1.right_stick_x * slowModeMultiplier);
+                robot.drivetrain.robotCentricDrive(dpadStrafe * slowModeMultiplier,
+                        dpadDrive * slowModeMultiplier,
+                        gamepad1.right_stick_x * slowModeMultiplier);
             } else {
-                robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x * slowModeMultiplier, -gamepad1.left_stick_y * slowModeMultiplier, gamepad1.right_stick_x * slowModeMultiplier);
+                robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x * slowModeMultiplier,
+                        -gamepad1.left_stick_y * slowModeMultiplier,
+                        gamepad1.right_stick_x * slowModeMultiplier);
             }
             if (gamepad1.shareWasPressed()) {
                 robot.hardware.imu.resetYaw();
