@@ -93,11 +93,11 @@ public class TeleOp_debug extends LinearOpMode {
             pollenShooter.setTurretPower(gamepad2.left_stick_x);
 
             //RUMBLE (trigger on transition to ready state)
-            //boolean justBecameReady = PSisReady && !PSwasReady;
-            if (pollenShooter.isReady()) {
+            boolean justBecameReady = PSisReady && !PSwasReady;
+            if (justBecameReady) {
                 gamepad2.rumble(300);
             }
-            //PSwasReady = PSisReady;
+            PSwasReady = PSisReady;
 
             intake.update();
 
@@ -111,7 +111,6 @@ public class TeleOp_debug extends LinearOpMode {
             telemetry.addData("RPM", shooterRPM);
             telemetry.addLine();
             telemetry.addData("PSisReady", PSisReady);
-            //telemetry.addData("JustBecameReady", justBecameReady);
             telemetry.addLine();
             telemetry.addData("Intake", "P1 right bumper, P2 right trigger");
             telemetry.addData("Outtake", "P1 left bumper, P2 left trigger");
