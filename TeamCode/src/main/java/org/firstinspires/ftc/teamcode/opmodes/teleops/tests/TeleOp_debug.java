@@ -21,15 +21,11 @@ public class TeleOp_debug extends LinearOpMode {
 
         boolean PSwasReady = false;
 
-        intake.setState(Intake.IntakeState.UP);
-
         waitForStart();
 
         while (opModeIsActive()) {
 
             double shooterRPM = Math.abs(pollenShooter.getCurrentVelocity()) * 60 / 28;
-
-            intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             //DRIVETRAIN
             double slowModeMultiplier;

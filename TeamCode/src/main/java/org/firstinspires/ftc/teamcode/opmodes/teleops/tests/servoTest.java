@@ -18,7 +18,6 @@ public class servoTest extends LinearOpMode {
 
         CRServo turret = hardwareMap.get(CRServo.class, "pollenTurret");
 
-        CRServo hood = hardwareMap.get(CRServo.class, "hood");
 
 
         waitForStart();
@@ -31,11 +30,6 @@ public class servoTest extends LinearOpMode {
                 turret.setPower(0);
             }
 
-            if (gamepad1.dpad_up) {
-                hood.setPower(1);
-            } else if (gamepad1.dpad_down) {
-                hood.setPower(0);
-            }
 
             telemetry.update();
         }

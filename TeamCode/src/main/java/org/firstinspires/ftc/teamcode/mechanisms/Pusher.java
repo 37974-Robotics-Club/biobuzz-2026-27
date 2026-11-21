@@ -43,6 +43,11 @@ public class Pusher {
         }
     }
 
+    public void setPusherPower(double pusherManualPower) {
+        pusherMotor.setPower(pusherManualPower);
+
+    }
+
     public PusherState getState() {
         return currentState;
     }

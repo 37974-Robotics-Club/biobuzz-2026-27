@@ -19,6 +19,7 @@ public class Intake {
         UP,
         DOWN_IDLE,
         INTAKE,
+        SLOW_INTAKE,
         OUTTAKE
     }
 
@@ -54,6 +55,11 @@ public class Intake {
                     intakeTargetPower = 0.8;
                 }
                 break;
+            case SLOW_INTAKE:
+                intakeDrop.setPosition(intakeDownPosition);
+                if (intakeDrop.getPosition() == intakeDownPosition) {
+                    intakeTargetPower = 0.7;
+                }
 
             case OUTTAKE:
                 intakeDrop.setPosition(intakeDownPosition);
@@ -62,6 +68,10 @@ public class Intake {
                 }
                 break;
         }
+    }
+
+    public void setIntakePower(double intakeManualPower) {
+        intakeMotor.setPower(intakeManualPower);
     }
 
     public void update() {
