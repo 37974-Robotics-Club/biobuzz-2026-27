@@ -19,6 +19,7 @@ public class ShooterPIDFTuning extends OpMode {
      * Adapted from FTControl docs
      */
 
+    //192.168.43.1:8001
     // use Panels
     public static double targetVelocity = 0.0;
 
@@ -27,7 +28,7 @@ public class ShooterPIDFTuning extends OpMode {
     public static double kD = 0.0;
     public static double kF = 0.0;
 
-    private DcMotorEx pollenShooter;
+    private DcMotorEx pollenFlywheel;
     private TelemetryManager panelsTelemetry;
     private VoltageSensor batteryVoltage;
 
@@ -35,30 +36,30 @@ public class ShooterPIDFTuning extends OpMode {
     public void init() {
         batteryVoltage = hardwareMap.voltageSensor.iterator().next();
 
-        pollenShooter = hardwareMap.get(DcMotorEx.class, "pollenShooter");
+        pollenFlywheel = hardwareMap.get(DcMotorEx.class, "pollenShooter");
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
-        pollenShooter.setPower(0);
-        pollenShooter.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        pollenFlywheel.setPower(0);
+        pollenFlywheel.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
     }
 
     @Override
     public void start() {
-        pollenShooter.setVelocity(0);
+        pollenFlywheel.setVelocity(0);
     }
 
     @Override
     public void loop() {
 
-        pollenShooter.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
+        pollenFlywheel.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER,
                 new PIDFCoefficients(kP, kI, kD, kF)
         );
 
-        pollenShooter.setVelocity(targetVelocity);
+        pollenFlywheel.setVelocity(targetVelocity);
 
-        double currentVelocity = pollenShooter.getVelocity();
+        double currentVelocity = pollenFlywheel.getVelocity();
         double error = targetVelocity - currentVelocity;
 
 
@@ -87,9 +88,8 @@ public class ShooterPIDFTuning extends OpMode {
 
     @Override
     public void stop() {
-        if (pollenShooter != null) {
-            pollenShooter.setVelocity(0);
-            pollenShooter.setPower(0);
+        if (pollenFlywheel != null) {
+            pollenFlywheel.setVelocity(0);
         }
     }
 }

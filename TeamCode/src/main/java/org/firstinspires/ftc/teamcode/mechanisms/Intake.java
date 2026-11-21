@@ -10,7 +10,7 @@ public class Intake {
     private DcMotorEx intakeMotor;
     private Servo intakeDrop;
 
-    public double intakeDownPosition = 1;
+    public double intakeDownPosition = 0.5;
     public double intakeUpPosition = 0;
 
     public double intakeTargetPower = 0;

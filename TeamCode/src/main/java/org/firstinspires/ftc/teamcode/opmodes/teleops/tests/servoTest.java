@@ -16,7 +16,7 @@ public class servoTest extends LinearOpMode {
     public void runOpMode() throws InterruptedException {
 
 
-        CRServo turret = hardwareMap.get(CRServo.class, "turret");
+        CRServo turret = hardwareMap.get(CRServo.class, "pollenTurret");
 
         CRServo hood = hardwareMap.get(CRServo.class, "hood");
 
