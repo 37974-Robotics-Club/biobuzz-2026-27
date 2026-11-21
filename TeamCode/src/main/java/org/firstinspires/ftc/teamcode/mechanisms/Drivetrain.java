@@ -9,9 +9,9 @@ import org.firstinspires.ftc.teamcode.robot.controllers.SlewRateLimiter;
 
 public class Drivetrain {
 
-    private final SlewRateLimiter driveLimiter = new SlewRateLimiter(16.0);
-    private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(16.0);
-    private final SlewRateLimiter turnLimiter = new SlewRateLimiter(16.0);
+    private final SlewRateLimiter driveLimiter = new SlewRateLimiter(9.0);
+    private final SlewRateLimiter strafeLimiter = new SlewRateLimiter(9.0);
+    private final SlewRateLimiter turnLimiter = new SlewRateLimiter(9.0);
 
     private final DcMotorEx frontLeft;
     private final DcMotorEx frontRight;
@@ -36,7 +36,7 @@ public class Drivetrain {
         smoothedStrafe *= Config.STRAFE_COMPENSATION;
 
         double denominator = Math.max(Math.abs(smoothedDrive) + Math.abs(smoothedStrafe) + Math.abs(smoothedTurn), 1.0);
-        double speedLimit = 0.8;
+        double speedLimit = 0.75;
 
         double frontLeftPower = ((smoothedDrive + smoothedStrafe + smoothedTurn) / denominator) * speedLimit;
         double backLeftPower = ((smoothedDrive - smoothedStrafe + smoothedTurn) / denominator) * speedLimit;

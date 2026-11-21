@@ -23,10 +23,10 @@ public class ShooterPIDFTuning extends OpMode {
     // use Panels
     public static double targetVelocity = 0.0;
 
-    public static double kP = 0.0;
+    public static double kP = 20;
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double kF = 0.0;
+    public static double kF = 11.8;
 
     private DcMotorEx pollenFlywheel;
     private TelemetryManager panelsTelemetry;
@@ -36,7 +36,7 @@ public class ShooterPIDFTuning extends OpMode {
     public void init() {
         batteryVoltage = hardwareMap.voltageSensor.iterator().next();
 
-        pollenFlywheel = hardwareMap.get(DcMotorEx.class, "pollenShooter");
+        pollenFlywheel = hardwareMap.get(DcMotorEx.class, "pollenFlywheel");
 
         panelsTelemetry = PanelsTelemetry.INSTANCE.getTelemetry();
 
@@ -89,7 +89,7 @@ public class ShooterPIDFTuning extends OpMode {
     @Override
     public void stop() {
         if (pollenFlywheel != null) {
-            pollenFlywheel.setVelocity(0);
+            pollenFlywheel.setPower(0);
         }
     }
 }

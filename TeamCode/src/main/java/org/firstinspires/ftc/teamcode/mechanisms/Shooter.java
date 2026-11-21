@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.mechanisms;
 
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.telemetry;
 import com.qualcomm.robotcore.hardware.AnalogInput;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public class Shooter {
     private DcMotorEx flywheel;
@@ -15,15 +18,11 @@ public class Shooter {
     private static final double HOOD_INCREMENT = 0.05;
     private static final long HOOD_INTERVAL_MS = 75;
 
-    private static final double DEFAULT_TURRET_MIN_VOLTAGE = 0.0;
-    private static final double DEFAULT_TURRET_MAX_VOLTAGE = 3.3;
-
-    private double minTurretVoltage = DEFAULT_TURRET_MIN_VOLTAGE;
-    private double maxTurretVoltage = DEFAULT_TURRET_MAX_VOLTAGE;
-    private boolean useTurretVoltageLimits = false;
+    private static final double TURRET_MAX_VOLTAGE = 3.3;
+    private static final double TURRET_MIN_VOLTAGE = 0.0;
 
     public enum FlywheelState {
-        IDLE, SPINNING, READY
+        IDLE, SPINNING, READY, REVERSE
     }
 
     private FlywheelState state = FlywheelState.IDLE;
@@ -31,10 +30,10 @@ public class Shooter {
     private double targetHoodPosition = 0;
 
     private double targetVelocity = 0;
-    public static double kP = 0.0;
+    public static double kP = 20.0;
     public static double kI = 0.0;
     public static double kD = 0.0;
-    public static double kF = 0.0;
+    public static double kF = 11.8;
 
     private long hoodElapsedTime;
 
@@ -71,7 +70,7 @@ public class Shooter {
             setState(FlywheelState.IDLE);
             return state;
         }
-        if (velocityError <= targetVelocity * 0.05) {
+        if (velocityError <= targetVelocity * 0.10) {
             state = FlywheelState.READY;
             return state;
         }
@@ -126,29 +125,23 @@ public class Shooter {
         }
     }
 
-    public void setTurretVoltageLimits(double minVoltage, double maxVoltage) {
-        this.minTurretVoltage = minVoltage;
-        this.maxTurretVoltage = maxVoltage;
-        this.useTurretVoltageLimits = true;
-    }
-
-    public void disableTurretVoltageLimits() {
-        this.useTurretVoltageLimits = false;
-    }
-
     public void setTurretPower(double turretPower) {
-        if (turret == null) return;
-        if (useTurretVoltageLimits && turretFeedback != null) {
+        if (turret == null) {
+            return;
+        }
+        /*
+        if (turretFeedback != null) {
             double currentVoltage = turretFeedback.getVoltage();
-            if (currentVoltage <= minTurretVoltage && turretPower < 0) {
+            if (currentVoltage <= TURRET_MIN_VOLTAGE && turretPower < 0) {
                 turret.setPower(0.0);
                 return;
             }
-            if (currentVoltage >= maxTurretVoltage && turretPower > 0) {
+            if (currentVoltage >= TURRET_MAX_VOLTAGE && turretPower > 0) {
                 turret.setPower(0.0);
                 return;
             }
         }
+         */
         turret.setPower(turretPower);
     }
 
@@ -157,10 +150,6 @@ public class Shooter {
             return turretFeedback.getVoltage();
         }
         return 0.0;
-    }
-
-    public double getTurretAngle() {
-        return (getTurretVoltage() / 3.3) * 360.0;
     }
 
     public double getHoodPosition() {

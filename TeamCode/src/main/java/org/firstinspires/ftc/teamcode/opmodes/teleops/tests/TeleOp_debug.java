@@ -40,9 +40,9 @@ public class TeleOp_debug extends LinearOpMode {
             }
 
             //INTAKE
-            if (gamepad1.right_bumper || gamepad2.right_trigger_pressed) {
+            if (gamepad1.right_trigger > 0.25 || gamepad2.right_trigger > 0.25) {
                 intake.setState(Intake.IntakeState.INTAKE);
-            } else if (gamepad1.left_bumper || gamepad2.left_trigger_pressed) {
+            } else if (gamepad1.left_trigger > 0.25 || gamepad2.left_trigger > 0.25) {
                 intake.setState(Intake.IntakeState.OUTTAKE);
             } else {
                 intake.setState(Intake.IntakeState.DOWN_IDLE);
@@ -50,16 +50,16 @@ public class TeleOp_debug extends LinearOpMode {
 
             //SHOOTER
             if (gamepad2.cross) {
-                pollenShooter.setTargetVelocity(2400);
+                pollenShooter.setTargetVelocity(2600);
             } else {
                 pollenShooter.setTargetVelocity(0);
             }
             boolean PSisReady = pollenShooter.isReady();
 
-            //TEMPORARY PUSHER
-            if (gamepad2.triangle && PSisReady) {
+            //PUSHER
+            if (gamepad2.right_bumper && PSisReady) {
                 pusher.setState(Pusher.PusherState.FEEDING);
-            } else if (gamepad2.circle) {
+            } else if (gamepad2.left_bumper) {
                 pusher.setState(Pusher.PusherState.REVERSE);
             } else {
                 pusher.setState(Pusher.PusherState.IDLE);
@@ -75,11 +75,11 @@ public class TeleOp_debug extends LinearOpMode {
             pollenShooter.setTurretPower(gamepad2.left_stick_x);
 
             //RUMBLE (trigger on transition to ready state)
-            boolean justBecameReady = PSisReady && !PSwasReady;
-            if (justBecameReady) {
+            //boolean justBecameReady = PSisReady && !PSwasReady;
+            if (pollenShooter.isReady()) {
                 gamepad2.rumble(300);
             }
-            PSwasReady = PSisReady;
+            //PSwasReady = PSisReady;
 
             intake.update();
 
@@ -88,7 +88,7 @@ public class TeleOp_debug extends LinearOpMode {
             telemetry.addData("RPM", shooterRPM);
             telemetry.addLine();
             telemetry.addData("PSisReady", PSisReady);
-            telemetry.addData("JustBecameReady", justBecameReady);
+            //telemetry.addData("JustBecameReady", justBecameReady);
             telemetry.addLine();
             telemetry.addData("Intake", "P1 right bumper, P2 right trigger");
             telemetry.addData("Outtake", "P1 left bumper, P2 left trigger");

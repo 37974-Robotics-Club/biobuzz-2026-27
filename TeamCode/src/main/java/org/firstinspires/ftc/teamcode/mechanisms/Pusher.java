@@ -34,7 +34,7 @@ public class Pusher {
                 break;
 
             case FEEDING:
-                pusherMotor.setPower(1);
+                pusherMotor.setPower(0.9);
                 break;
 
             case REVERSE:
