@@ -34,19 +34,23 @@ public class TeleOp_debug extends LinearOpMode {
             intake.setState(Intake.IntakeState.DOWN_IDLE);
 
             //DRIVETRAIN
+            double slowModeMultiplier;
+            if (gamepad1.left_bumper) {
+                slowModeMultiplier = 0.35;
+            } else {
+                slowModeMultiplier = 1.0;
+            }
             double dpadDrive = 0.0;
             double dpadStrafe = 0.0;
             if (gamepad1.dpad_up) dpadDrive += 1.0;
             if (gamepad1.dpad_down) dpadDrive -= 1.0;
             if (gamepad1.dpad_right) dpadStrafe += 1.0;
             if (gamepad1.dpad_left) dpadStrafe -= 1.0;
-
             if (dpadDrive != 0 || dpadStrafe != 0) {
-                robot.drivetrain.robotCentricDrive(dpadStrafe, dpadDrive, gamepad1.right_stick_x);
+                robot.drivetrain.robotCentricDrive(dpadStrafe * slowModeMultiplier, dpadDrive * slowModeMultiplier, gamepad1.right_stick_x * slowModeMultiplier);
             } else {
-                robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x, -gamepad1.left_stick_y, gamepad1.right_stick_x);
+                robot.drivetrain.fieldCentricDrive(gamepad1.left_stick_x * slowModeMultiplier, -gamepad1.left_stick_y * slowModeMultiplier, gamepad1.right_stick_x * slowModeMultiplier);
             }
-
             if (gamepad1.shareWasPressed()) {
                 robot.hardware.imu.resetYaw();
             }
@@ -98,6 +102,7 @@ public class TeleOp_debug extends LinearOpMode {
             telemetry.addData("Drive, Strafe", "P1 left stick");
             telemetry.addData("Turn", "P1 right stick x");
             telemetry.addData("Robot-centric drive", "P1 d-pads");
+            telemetry.addData("Slow mode", "P1 left bumper");
             telemetry.addLine();
             telemetry.addData("Hood Position", pollenShooter.getHoodPosition());
             telemetry.addData("Vel", pollenShooter.getCurrentVelocity());
