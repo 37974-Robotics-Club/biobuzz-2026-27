@@ -34,7 +34,7 @@ public class TeleOp_debug extends LinearOpMode {
             //DRIVETRAIN
             double slowModeMultiplier;
             if (gamepad1.left_bumper) {
-                slowModeMultiplier = 0.35;
+                slowModeMultiplier = 0.45;
             } else {
                 slowModeMultiplier = 1.0;
             }
