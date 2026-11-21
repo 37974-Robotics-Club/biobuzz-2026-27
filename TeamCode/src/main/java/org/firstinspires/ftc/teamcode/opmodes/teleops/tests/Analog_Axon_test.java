@@ -21,7 +21,8 @@ public class Analog_Axon_test extends LinearOpMode {
 
             pollenShooter.setTurretPower(turretPower);
 
-            telemetry.addData("Turret Input", "%.2f", turretPower);
+            telemetry.addData("Turret Input Power", "%.2f", turretPower);
+            telemetry.addData("Turret Feedback Voltage", "%.3f V", pollenShooter.getTurretVoltage());
             telemetry.addLine();
             telemetry.addData("Controls", "P2 Left Stick X to rotate turret");
             telemetry.update();
