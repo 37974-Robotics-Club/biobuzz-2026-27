@@ -70,7 +70,7 @@ public class Intake {
         }
     }
 
-    public void setIntakePower(double intakeManualPower) {
+    public void setManualIntakePower(double intakeManualPower) {
         intakeMotor.setPower(intakeManualPower);
     }
 

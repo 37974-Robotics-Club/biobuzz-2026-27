@@ -33,7 +33,7 @@ public class Hive_Up_Shoot_Park extends LinearOpMode {
         pollenShooter.setTargetVelocity(2480);
         sleep(900);
         pusher.setPusherPower(0.7);
-        intake.setIntakePower(0.75);
+        intake.setManualIntakePower(0.75);
         sleep(150);
         pusher.setPusherPower(0.7);
         sleep(500);
@@ -42,7 +42,7 @@ public class Hive_Up_Shoot_Park extends LinearOpMode {
         robot.drivetrain.robotCentricDrive(0, 0, -0.75);
         sleep(200);
         robot.drivetrain.robotCentricDrive(0, 0.75, 0);
-        intake.setIntakePower(0);
+        intake.setManualIntakePower(0);
         pusher.setPusherPower(0.7);
         sleep(1500);
         robot.drivetrain.robotCentricDrive(0, 0, 0);
