@@ -55,26 +55,5 @@ public class Hive_Up_Shoot_Park extends LinearOpMode {
         robot.drivetrain.robotCentricDrive(0, 0.75, 0);
         sleep(500);
         robot.drivetrain.robotCentricDrive(0, 0, 0);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }

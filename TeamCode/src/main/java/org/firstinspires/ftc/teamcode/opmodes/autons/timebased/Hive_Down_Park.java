@@ -17,13 +17,11 @@ public class Hive_Down_Park extends LinearOpMode {
 
         intake.setState(Intake.IntakeState.UP);
 
-
         waitForStart();
 
         if (isStopRequested()) {
             return;
         }
-
         intake.setState(Intake.IntakeState.DOWN_IDLE);
         robot.drivetrain.robotCentricDrive(0, 0.5, 0);
         sleep(600);
