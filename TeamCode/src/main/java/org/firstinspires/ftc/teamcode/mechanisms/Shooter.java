@@ -126,7 +126,7 @@ public class Shooter {
         if (turret == null) {
             return;
         }
-        /*
+
         if (turretFeedback != null) {
             double currentVoltage = turretFeedback.getVoltage();
             if (currentVoltage <= TURRET_MIN_VOLTAGE && turretPower < 0) {
@@ -138,7 +138,7 @@ public class Shooter {
                 return;
             }
         }
-         */
+
         turret.setPower(turretPower);
     }
 
